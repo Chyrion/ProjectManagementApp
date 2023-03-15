@@ -2,6 +2,7 @@
 # Project Management Application
 
 A web application for handling co-operative projects.
+Note for reviews: everything in the project will be written in English, but feedback may be given in either Finnish or English!
 
 ### Functionality
 
