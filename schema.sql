@@ -7,7 +7,7 @@ CREATE TABLE Projects (
     id SERIAL PRIMARY KEY,
     name TEXT,
     description TEXT,
-    deadline DATE NOT NULL
+    deadline DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE ProjectUsers (
