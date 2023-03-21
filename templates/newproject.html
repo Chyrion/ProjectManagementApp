@@ -2,7 +2,22 @@
   <title>Create project - Project Management App</title>
 </head>
 <body>
-  <div class="project-create">
+  <div action="/projects" class="project-create">
     <h1>Create a project</h1>
+    <form action="/projects" method="POST">
+      <h4>Project name</h4>
+      <input type="text" name="project_name" required />
+      <h4>Description</h4>
+      <input type="text" name="project_description" />
+      <h4>Deadline</h4>
+      <input
+        type="date"
+        name="project_deadline"
+        min="2023-01-01"
+        max="2035-12-31"
+      />
+      <br />
+      <input type="submit" value="Create" />
+    </form>
   </div>
 </body>

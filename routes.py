@@ -1,32 +1,42 @@
 from app import app
 from db import db
-from flask import Flask, render_template, request, request
+import projects
+import sessionsystem
+from flask import Flask, render_template, request, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def index():
+    if request.method == 'POST':
+        username, password = request.form['username'], request.form['password']
+        login = sessionsystem.login(username, password)
+        if not login:
+            return render_template('./login.html')
+        else:
+            return redirect('/newproject')
     return render_template('./login.html')
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        username, password = request.form['username'], request.form['password']
+        reg = sessionsystem.register(username, password)
+        if not reg:
+            return render_template('./register.html', error=True)
+        else:
+            return redirect('./login')
+    else:
+        return render_template('./register.html', error=False)
 
 
 @app.route('/projects', methods=["POST"])
 def project_page():
-    username = request.form['username']
-    try:
-        sql_user_id = """SELECT id, name FROM Users WHERE name = :name"""
-        res_user_id = db.session.execute(text(sql_user_id), {'name': username})
-        user = res_user_id.fetchone()
-    except:
-        pass
-
-    sql_projects = text(
-        """SELECT P.* FROM Projects P, ProjectUsers PU WHERE P.id = PU.pid AND PU.uid =:user_id """)
-    projects = db.session.execute(
-        sql_projects, {'user_id': user[0]}).fetchall()
-    print(user)
-
-    return render_template('./projects.html', projects=projects, name=user[1])
+    username = sessionsystem.get_session()['username']
+    user_projects = projects.get_projects(username)
+    return render_template('./projects.html', projects=user_projects, name=username)
 
 
 @app.route('/projectview')

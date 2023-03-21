@@ -1,0 +1,16 @@
+<head>
+  <title>Register - Project Management App</title>
+</head>
+<body>
+  <div>
+    <h1>Register</h1>
+    <form action="/" method="POST">
+      {% if error == True %}
+      <p>User already exists</p>
+      {% endif %}
+      <input type="text" name="username" required />
+      <input type="password" name="password" minlength="6" required />
+      <input type="submit" value="Register" />
+    </form>
+  </div>
+</body>
