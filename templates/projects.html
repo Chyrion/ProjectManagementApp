@@ -6,9 +6,11 @@
   <h1>Projects</h1>
   <h3>Hello {{ name }}</h3>
   <p>A list of your projects:</p>
-  {% for item in projects %}
+  {% if projects %} {% for item in projects %}
   <div class="project-item">{{ item[0] }}, {{ item[1] }}</div>
-  {% endfor %}
+  {% endfor %} {% else %}
+  <p>No projects found!</p>
+  {% endif %}
   <a href="/newproject">
     <button name="create_project">New Project</button>
   </a>

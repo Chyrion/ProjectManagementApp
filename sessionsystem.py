@@ -19,12 +19,12 @@ def register(username, password):
 
 def login(username, password):
     try:
-        sql = '''SELECT name, password FROM Users WHERE name = :username'''
+        sql = '''SELECT id, name, password FROM Users WHERE name = :username'''
         res = db.session.execute(text(sql), {'username': username})
         user = res.fetchone()
     except:
         pass
-    if not user or not check_password_hash(user[0], password):
+    if not user or not check_password_hash(user[2], password):
         return False
     session['uid'], session['username'] = user[0], user[1]
     return True

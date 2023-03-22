@@ -4,10 +4,9 @@ import sessionsystem
 from flask import render_template, request, request, redirect
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    if request.method == 'POST':
-        return render_template('./entrypage.html')
+    return render_template('./entrypage.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -18,7 +17,7 @@ def login():
         if not login:
             return render_template('./error.html', error='Login error')
         else:
-            return redirect('/newproject')
+            return redirect('/projects')
     else:
         return render_template('./login.html')
 
@@ -31,18 +30,16 @@ def register():
         if not reg:
             return render_template('./error.html', error='Error registering')
         else:
-            return render_template('/')
+            return render_template('./entrypage.html')
     else:
         return render_template('/register.html')
 
 
-@app.route('/projects', methods=["POST"])
+@app.route('/projects', methods=['GET', 'POST'])
 def project_page():
-    username = sessionsystem.session_username()
-    user_projects = projects.get_projects(username)
-    if not user_projects:
-        return render_template('./error.html', error='Error fetching user projects')
-    return render_template('./projects.html', projects=user_projects, name=username)
+    if request.method == 'GET':
+        user_projects = projects.get_projects()
+        return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
 
 
 @app.route('/projectview')
