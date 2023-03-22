@@ -1,22 +1,25 @@
 from app import app
-from db import db
 import projects
 import sessionsystem
-from flask import Flask, render_template, request, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
+from flask import render_template, request, request, redirect
 
 
-@app.route('/', methods=['POST'])
+@app.route('/')
 def index():
+    return render_template('./entrypage.html')
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
     if request.method == 'POST':
         username, password = request.form['username'], request.form['password']
         login = sessionsystem.login(username, password)
         if not login:
-            return render_template('./login.html')
+            return render_template('./error.html', error='Login error')
         else:
             return redirect('/newproject')
-    return render_template('./login.html')
+    else:
+        return render_template('./login.html')
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -25,17 +28,19 @@ def register():
         username, password = request.form['username'], request.form['password']
         reg = sessionsystem.register(username, password)
         if not reg:
-            return render_template('./register.html', error=True)
+            return render_template('./error.html', error='Error registering')
         else:
-            return redirect('./login')
+            return redirect('/')
     else:
-        return render_template('./register.html', error=False)
+        return render_template('./register.html')
 
 
 @app.route('/projects', methods=["POST"])
 def project_page():
-    username = sessionsystem.get_session()['username']
+    username = sessionsystem.session_username()
     user_projects = projects.get_projects(username)
+    if not user_projects:
+        return render_template('./error.html', error='Error fetching user projects')
     return render_template('./projects.html', projects=user_projects, name=username)
 
 

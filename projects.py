@@ -5,7 +5,7 @@ from sqlalchemy.sql import text
 
 
 def get_projects(username):
-    user_info = sessionsystem.get_session()
+    user_info = (sessionsystem.session_uid(), sessionsystem.session_username())
     try:
         sql = '''SELECT P.* FROM Projects P, ProjectUsers PU WHERE P.id = PU.pid AND PU.uid =:user_id'''
         projects = db.session.execute(
