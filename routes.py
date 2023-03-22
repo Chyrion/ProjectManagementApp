@@ -4,9 +4,10 @@ import sessionsystem
 from flask import render_template, request, request, redirect
 
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def index():
-    return render_template('./entrypage.html')
+    if request.method == 'POST':
+        return render_template('./entrypage.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -30,9 +31,9 @@ def register():
         if not reg:
             return render_template('./error.html', error='Error registering')
         else:
-            return redirect('/')
+            return render_template('/')
     else:
-        return render_template('./register.html')
+        return render_template('/register.html')
 
 
 @app.route('/projects', methods=["POST"])
