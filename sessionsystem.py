@@ -30,6 +30,11 @@ def login(username, password):
     return True
 
 
+def logout():
+    del session['uid']
+    del session['username']
+
+
 def session_uid():
     return session.get('uid', 0)
 

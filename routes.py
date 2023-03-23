@@ -6,6 +6,8 @@ from flask import render_template, request, request, redirect
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    if sessionsystem.session_uid():
+        return redirect('./projects')
     return render_template('./entrypage.html')
 
 
@@ -37,9 +39,18 @@ def register():
 
 @app.route('/projects', methods=['GET', 'POST'])
 def project_page():
-    if request.method == 'GET':
-        user_projects = projects.get_projects()
-        return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
+    if request.method == 'POST':
+        # new_project(name, description, users, deadline)
+        # the users parameter is currently being passed in as a blank list until I implement it properly
+        project_name = request.form['project_name']
+        project_description = request.form['project_description']
+        project_deadline = request.form['project_deadline']
+        add = projects.new_project(
+            project_name, project_description, [], project_deadline)
+        if not add:
+            return render_template('./error.html', error='Error adding project')
+    user_projects = projects.get_all_projects()
+    return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
 
 
 @app.route('/projectview')

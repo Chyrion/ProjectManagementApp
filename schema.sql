@@ -11,6 +11,6 @@ CREATE TABLE Projects (
 );
 
 CREATE TABLE ProjectUsers (
-    pid INTEGER REFERENCES Projects,
-    uid INTEGER REFERENCES Users
+    pid INTEGER,
+    uid INTEGER
 );
