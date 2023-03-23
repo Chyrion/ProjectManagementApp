@@ -33,6 +33,7 @@ def login(username, password):
 def logout():
     del session['uid']
     del session['username']
+    return True
 
 
 def session_uid():

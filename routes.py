@@ -37,20 +37,28 @@ def register():
         return render_template('/register.html')
 
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    sessionsystem.logout()
+    return redirect('/')
+
+
 @app.route('/projects', methods=['GET', 'POST'])
 def project_page():
-    if request.method == 'POST':
-        # new_project(name, description, users, deadline)
-        # the users parameter is currently being passed in as a blank list until I implement it properly
-        project_name = request.form['project_name']
-        project_description = request.form['project_description']
-        project_deadline = request.form['project_deadline']
-        add = projects.new_project(
-            project_name, project_description, [], project_deadline)
-        if not add:
-            return render_template('./error.html', error='Error adding project')
-    user_projects = projects.get_all_projects()
-    return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
+    if sessionsystem.session_uid():
+        if request.method == 'POST':
+            # new_project(name, description, users, deadline)
+            # the users parameter is currently being passed in as a blank list until I implement it properly
+            project_name = request.form['project_name']
+            project_description = request.form['project_description']
+            project_deadline = request.form['project_deadline']
+            add = projects.new_project(
+                project_name, project_description, [], project_deadline)
+            if not add:
+                return render_template('./error.html', error='Error adding project')
+        user_projects = projects.get_all_projects()
+        return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
+    return redirect('/')
 
 
 @app.route('/projectview')
