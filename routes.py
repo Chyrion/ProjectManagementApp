@@ -54,8 +54,8 @@ def project_page():
             project_deadline = request.form['project_deadline']
             add = projects.new_project(
                 project_name, project_description, [], project_deadline)
-            if not add:
-                return render_template('./error.html', error='Error adding project')
+            if type(add) != bool:
+                return render_template('./error.html', error=add)
         user_projects = projects.get_all_projects()
         return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
     return redirect('/')

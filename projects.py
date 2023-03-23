@@ -11,8 +11,8 @@ def get_all_projects():
             text(sql), {'user_id': uid})
         projects = res_projects.fetchall()
         return projects
-    except:
-        return False
+    except Exception as e:
+        return e
 
 
 def new_project(name, description, users, deadline):
@@ -23,24 +23,24 @@ def new_project(name, description, users, deadline):
         db.session.execute(
             text(sql_projects), {'name': name, 'description': description, 'deadline': deadline})
         db.session.commit()
-    except:
-        return False
+    except Exception as e:
+        return e
 
     # return True
     try:
         sql_pid = '''SELECT MAX(id) FROM Projects'''
         res = db.session.execute(text(sql_pid))
         pid = res.fetchone()
-    except:
-        return False
+    except Exception as e:
+        return e
 
     try:
         sql_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :uid)'''
         db.session.execute(text(sql_projectusers), {
-                           'pid': int(pid), 'uid': int(uid)})
+                           'pid': int(pid[0]), 'uid': int(uid)})
         db.session.commit()
-    except:
-        pass
+    except Exception as e:
+        return e
     return True
 
 
@@ -50,5 +50,5 @@ def get_project(name):
         res = db.session.execute(text(sql), {'name': name})
         project = res.fetchone()
         return project
-    except:
-        return False
+    except Exception as e:
+        return e
