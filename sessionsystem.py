@@ -5,7 +5,16 @@ from sqlalchemy.sql import text
 
 
 def register(username, password):
-    # TODO: Check if user already exists
+    # Check if user already exists
+    try:
+        sql_user = '''SELECT name FROM Users WHERE name = :name'''
+        res = db.session.execute(text(sql_user), {'name': username})
+        existing_user = res.fetchone()
+    except:
+        pass
+    if existing_user[0] == username:
+        return False
+
     pass_hash = generate_password_hash(password)
     try:
         sql = '''INSERT INTO Users (name, password) VALUES (:username, :password)'''

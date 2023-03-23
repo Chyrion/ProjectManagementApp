@@ -3,6 +3,12 @@
   <title>Projects - Project Management App</title>
 </head>
 <body>
+  <!-- This script prevents resubmitting forms, which can create duplicate entries in the database -->
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
   <h1>Projects</h1>
   <a href="/logout">
     <button name="logout">Log out</button>
