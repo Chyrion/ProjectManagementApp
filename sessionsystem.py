@@ -12,7 +12,7 @@ def register(username, password):
         existing_user = res.fetchone()
     except:
         pass
-    if existing_user[0] == username:
+    if existing_user:
         return False
 
     pass_hash = generate_password_hash(password)

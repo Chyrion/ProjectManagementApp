@@ -65,9 +65,13 @@ def project_page():
     return redirect('/')
 
 
-@app.route('/projectview')
-def projectview():
-    return render_template('./projectview.html')
+@app.route('/projectview/<int:id>')
+def projectview(id):
+    if projects.verify_user_in_project(pid=id, uid=sessionsystem.session_uid()):
+        project = projects.get_project(id=id)
+        return render_template('./projectview.html', project=project)
+    else:
+        return redirect('/')
 
 
 @app.route('/newproject')

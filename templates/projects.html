@@ -1,30 +1,30 @@
-<!DOCTYPE html>
-<head>
-  <title>Projects - Project Management App</title>
-</head>
-<body>
-  <!-- This script prevents resubmitting forms, which can create duplicate entries in the database -->
-  <script>
-    if (window.history.replaceState) {
-      window.history.replaceState(null, null, window.location.href);
-    }
-  </script>
-  <h1>Projects</h1>
-  <a href="/logout">
-    <button name="logout">Log out</button>
-  </a>
-  <h3>Hello {{ name }}</h3>
-  <p>A list of your projects:</p>
-  {% if projects %} {% for item in projects %}
-  <div class="project-item">
-    <h3>{{ item[1] }}</h3>
-    <p>{{ item[2] }}</p>
-    <p>Deadline: {{ item[3] }}</p>
-  </div>
-  {% endfor %} {% else %}
-  <p>No projects found!</p>
-  {% endif %}
-  <a href="/newproject">
-    <button name="create_project">New Project</button>
-  </a>
-</body>
+{% extends 'layout.html' %} {% block title %}Projects{% endblock %} {% block
+content %}
+<!-- This script prevents resubmitting forms, which can create duplicate entries in the database -->
+<script>
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
+<h1>Projects</h1>
+<a href="/logout">
+  <button name="logout">Log out</button>
+</a>
+<h3>Hello {{ name }}</h3>
+<p>A list of your projects:</p>
+{% if projects %} {% for item in projects %}
+<div class="project-item" id="{{ item[0] }}">
+  <h3>{{ item[1] }}</h3>
+  <p>{{ item[2] }}</p>
+  <p>Deadline: {{ item[3] }}</p>
+  <form action="/projectview/{{ item[0] }}">
+    <input type="submit" value="View project" />
+  </form>
+</div>
+{% endfor %} {% else %}
+<p>No projects found!</p>
+{% endif %}
+<a href="/newproject">
+  <button name="create_project">New Project</button>
+</a>
+{% endblock %}

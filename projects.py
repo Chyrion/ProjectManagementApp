@@ -66,3 +66,25 @@ def get_project(name):
         return project
     except Exception as e:
         return e
+
+
+def get_project(id):
+    try:
+        sql = '''SELECT id, name, description, deadline FROM Projects WHERE id = :id'''
+        res = db.session.execute(text(sql), {'id': id})
+        project = res.fetchone()
+        return project
+    except Exception as e:
+        return e
+
+
+def verify_user_in_project(pid, uid):
+    try:
+        sql = '''SELECT uid FROM ProjectUsers WHERE uid = :uid AND pid = :pid'''
+        res = db.session.execute(text(sql), {'uid': uid, 'pid': pid})
+        user_in = res.fetchone()
+    except Exception as e:
+        return e
+    if not user_in:
+        return False
+    return True

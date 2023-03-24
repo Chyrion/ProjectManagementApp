@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+}
+
+.container {
+  display: grid;
+  grid-template:
+    'navbar navbar navbar' 100wv
+    'left content right' auto
+    'footer footer footer' 100wv;
+}
+
+.navbar {
+}
+
+.project-item {
+  border: 1em solid red;
+}
