@@ -40,6 +40,7 @@ def new_project(name, description, users, deadline):
     # Add other users to ProjectUsers
     # TODO: Fix mass-adding users to a project
     for user in users:
+        user = user.strip()
         try:
             sql_user = '''SELECT id FROM Users WHERE name = :name'''
             res = db.session.execute(text(sql_user), {'name': user})

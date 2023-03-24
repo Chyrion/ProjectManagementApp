@@ -1,6 +1,7 @@
 from app import app
 import projects
 import sessionsystem
+from datetime import datetime
 from flask import render_template, request, request, redirect
 
 
@@ -52,6 +53,8 @@ def project_page():
             project_description = request.form['project_description']
             project_users = request.form['project_users'].split(',')
             project_deadline = request.form['project_deadline']
+            if not project_deadline:
+                project_deadline = datetime.now().date()
             add = projects.new_project(
                 project_name, project_description, project_users, project_deadline)
             # 'add' is a bool (True) if creating the project was successful, otherwise it is an Exception
