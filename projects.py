@@ -17,23 +17,18 @@ def get_all_projects():
 
 def new_project(name, description, users, deadline):
     uid = sessionsystem.session_uid()
-    pid = 0
     try:
-        sql_projects = '''INSERT INTO Projects (name, description, deadline) VALUES (:name, :description, :deadline)'''
-        db.session.execute(
+        # I learned that an INSERT can also return a value if the RETURNING <column> is used
+        # This uses it to get the id of the freshly added project to use for adding users to the project
+        sql_projects = '''INSERT INTO Projects (name, description, deadline) VALUES (:name, :description, :deadline) RETURNING id'''
+        res = db.session.execute(
             text(sql_projects), {'name': name, 'description': description, 'deadline': deadline})
         db.session.commit()
-    except Exception as e:
-        return e
-
-    # return True
-    try:
-        sql_pid = '''SELECT MAX(id) FROM Projects'''
-        res = db.session.execute(text(sql_pid))
         pid = res.fetchone()
     except Exception as e:
         return e
 
+    # Add creator of project to ProjectUsers
     try:
         sql_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :uid)'''
         db.session.execute(text(sql_projectusers), {
@@ -41,6 +36,24 @@ def new_project(name, description, users, deadline):
         db.session.commit()
     except Exception as e:
         return e
+
+    # Add other users to ProjectUsers
+    # TODO: Fix mass-adding users to a project
+    for user in users:
+        try:
+            sql_user = '''SELECT id FROM Users WHERE name = :name'''
+            res = db.session.execute(text(sql_user), {'name': user})
+            user_id = res.fetchone()
+        except Exception as e:
+            return e
+        if user_id:
+            try:
+                sql_user_to_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :user_id)'''
+                db.session.execute(text(sql_user_to_projectusers), {
+                                   'pid': int(pid[0]), 'user_id': user_id[0]})
+                db.session.commit()
+            except Exception as e:
+                return e
     return True
 
 

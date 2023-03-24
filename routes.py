@@ -48,12 +48,13 @@ def project_page():
     if sessionsystem.session_uid():
         if request.method == 'POST':
             # new_project(name, description, users, deadline)
-            # the users parameter is currently being passed in as a blank list until I implement it properly
             project_name = request.form['project_name']
             project_description = request.form['project_description']
+            project_users = request.form['project_users'].split(',')
             project_deadline = request.form['project_deadline']
             add = projects.new_project(
-                project_name, project_description, [], project_deadline)
+                project_name, project_description, project_users, project_deadline)
+            # 'add' is a bool (True) if creating the project was successful, otherwise it is an Exception
             if type(add) != bool:
                 return render_template('./error.html', error=add)
         user_projects = projects.get_all_projects()
