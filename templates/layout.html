@@ -6,10 +6,15 @@
 <body>
   <div class="container">
     <div class="navbar">
-      <button>a</button>
-      <button>b</button>
-      <button>c</button>
+      <a href="/">
+        <button>Home</button>
+      </a>
+      <a href="/logout">
+        <button>Log out</button>
+      </a>
     </div>
-    {% block content %} {% endblock %}
+    <div class="left"></div>
+    <div class="content">{% block content %} {% endblock %}</div>
+    <div class="right"></div>
   </div>
 </body>

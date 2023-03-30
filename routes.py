@@ -1,7 +1,7 @@
 from app import app
 import projects
 import sessionsystem
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import render_template, request, request, redirect
 
 
@@ -62,7 +62,7 @@ def project_page():
             if type(add) != bool:
                 return render_template('./error.html', error=add)
         user_projects = projects.get_all_projects()
-        return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username())
+        return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username(), date=datetime.now().date())
     return redirect('/')
 
 
@@ -70,7 +70,7 @@ def project_page():
 def projectview(id):
     if projects.verify_user_in_project(pid=id, uid=sessionsystem.session_uid()):
         project = projects.get_project(id=id)
-        return render_template('./projectview.html', project=project)
+        return render_template('./projectview.html', project=project, timeleft=timedelta(project['deadline'].day-datetime.now().day))
     else:
         return redirect('/')
 

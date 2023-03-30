@@ -11,6 +11,12 @@ body {
 }
 
 .navbar {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar button {
+  padding: 1em;
 }
 
 .project-item {

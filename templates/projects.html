@@ -7,17 +7,18 @@ content %}
   }
 </script>
 <h1>Projects</h1>
-<a href="/logout">
-  <button name="logout">Log out</button>
-</a>
 <h3>Hello {{ name }}</h3>
 <p>A list of your projects:</p>
-{% if projects %} {% for item in projects %}
-<div class="project-item" id="{{ item[0] }}">
-  <h3>{{ item[1] }}</h3>
-  <p>{{ item[2] }}</p>
-  <p>Deadline: {{ item[3] }}</p>
-  <form action="/projectview/{{ item[0] }}">
+{% if projects %} {% for project in projects %}
+<div class="project-item" id="{{ project['id'] }}">
+  <h3>{{ project['name'] }}</h3>
+  <p>{{ project['description'] }}</p>
+  <p>
+    Deadline: {{ project['deadline'].day }} {{
+    project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in {{
+    (project['deadline']-date).days }} days)
+  </p>
+  <form action="/projectview/{{ project['id'] }}">
     <input type="submit" value="View project" />
   </form>
 </div>
