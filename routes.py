@@ -56,7 +56,8 @@ def project_page():
             if not project_deadline:
                 project_deadline = datetime.now().date()
             add = projects.new_project(
-                project_name, project_description, project_users, project_deadline)
+                name=project_name, description=project_description, users=project_users, deadline=project_deadline)
+
             # 'add' is a bool (True) if creating the project was successful, otherwise it is an Exception
             if type(add) != bool:
                 return render_template('./error.html', error=add)

@@ -14,5 +14,6 @@ body {
 }
 
 .project-item {
-  border: 1em solid red;
+  border: 0.2em solid red;
+  margin: 0.2em 0;
 }
