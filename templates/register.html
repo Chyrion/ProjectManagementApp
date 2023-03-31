@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <head>
   <title>Register - Project Management App</title>
+  <link href="../static/main.css" rel="stylesheet" />
 </head>
 <body>
-  <div>
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1em;
+    "
+  >
     <h1>Register</h1>
     <form action="/register" method="POST">
+      <label for="username">Username</label>
       <input type="text" name="username" required />
+      <br />
+      <label for="password">Password</label>
       <input type="password" name="password" minlength="6" required />
+      <br />
       <input type="submit" value="Register" />
     </form>
   </div>

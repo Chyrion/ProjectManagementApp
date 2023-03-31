@@ -10,20 +10,25 @@ content %}
 <h3>Hello {{ name }}</h3>
 <p>A list of your projects:</p>
 {% if projects %} {% for project in projects %}
-<div class="projectlist-item" id="{{ project['id'] }}">
-  <div class="project">
-    <h3>{{ project['name'] }}</h3>
-    <p>{{ project['description'] }}</p>
-    <p>
-      Deadline: {{ project['deadline'].day }} {{
-      project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in
-      {{ (project['deadline']-date).days }} days)
-    </p>
-    <form action="/projectview/{{ project['id'] }}">
-      <input type="submit" value="View project" />
-    </form>
+<a
+  class="projectlist-item-a"
+  id="{{ project['id'] }}"
+  href='/projectview/{{ project["id"] }}'
+  title="View project"
+>
+  <div class="projectlist-item">
+    <div class="project">
+      <h3>{{ project['name'] }}</h3>
+      <p>{{ project['description'] }}</p>
+      <p>
+        Deadline: {{ project['deadline'].day }} {{
+        project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in
+        {{ (project['deadline']-date).days }} days)
+      </p>
+    </div>
   </div>
-</div>
+</a>
+
 {% endfor %} {% else %}
 <p>No projects found!</p>
 {% endif %}

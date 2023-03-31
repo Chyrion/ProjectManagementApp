@@ -27,11 +27,20 @@ body {
   padding: 1em;
 }
 
+.projectlist-item-a {
+  text-decoration: none;
+  color: black;
+}
+
 .projectlist-item {
   border: 0.2em solid rgb(152, 152, 152);
   border-radius: 1em;
   margin: 0.2em 0;
   background-color: rgb(241, 241, 241);
+}
+
+.projectlist-item:hover {
+  background-color: rgb(194, 194, 194);
 }
 
 .project {
