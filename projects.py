@@ -26,6 +26,10 @@ def get_all_projects():
 
 
 def new_project(name, description, deadline):
+    if len(name) > 100:
+        return 'Project name is too long'
+    if len(description) > 250:
+        return 'Project description is too long'
     uid = sessionsystem.session_uid()
     try:
         # I learned that an INSERT can also return a value if the RETURNING <column> is used

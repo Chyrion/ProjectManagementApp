@@ -4,9 +4,9 @@ content %}
   <h1>Create a project</h1>
   <form action="/projects" method="POST">
     <h4>Project name</h4>
-    <input type="text" name="project_name" required />
+    <input type="text" name="project_name" maxlength="100" required />
     <h4>Description</h4>
-    <input type="text" name="project_description" />
+    <input type="text" name="project_description" maxlength="250" />
     <h4>Deadline</h4>
     <input
       type="date"
