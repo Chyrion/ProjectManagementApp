@@ -125,3 +125,37 @@ def verify_user_in_project(pid, uid):
     if not user_in:
         return False
     return True
+
+
+def update_project_name(id, name):
+    if len(name) > 100:
+        return False
+    try:
+        sql = '''UPDATE Projects SET name = :name WHERE id = :id'''
+        db.session.execute(text(sql), {'name': name, 'id': id})
+        db.session.commit()
+    except Exception as e:
+        return e
+    return True
+
+
+def update_project_description(id, description):
+    if len(description) > 250:
+        return False
+    try:
+        sql = '''UPDATE Projects SET description = :description WHERE id = :id'''
+        db.session.execute(text(sql), {'description': description, 'id': id})
+        db.session.commit()
+    except Exception as e:
+        return e
+    return True
+
+
+def update_project_deadline(id, deadline):
+    try:
+        sql = '''UPDATE Projects SET deadline = :deadline WHERE id = :id'''
+        db.session.execute(text(sql), {'deadline': deadline, 'id': id})
+        db.session.commit()
+    except Exception as e:
+        return e
+    return True

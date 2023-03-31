@@ -79,9 +79,18 @@ def newproject():
     return render_template('./newproject.html')
 
 
-@app.route('/projectedit/<int:id>')
+@app.route('/projectedit/<int:id>', methods=['GET', 'POST'])
 def projectedit(id):
     if request.method == 'GET':
         return render_template('./projectedit.html', id=id)
     else:
-        return redirect('/')
+        if request.form['project_name']:
+            new_name = request.form['project_name']
+            projects.update_project_name(id, new_name)
+        if request.form['project_description']:
+            new_description = request.form['project_description']
+            projects.update_project_description(id, new_description)
+        if request.form['project_deadline']:
+            new_deadline = request.form['project_deadline']
+            projects.update_project_deadline(id, new_deadline)
+        return redirect(f'/projectview/{id}')
