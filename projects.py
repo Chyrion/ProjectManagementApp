@@ -25,7 +25,7 @@ def get_all_projects():
         return e
 
 
-def new_project(name, description, users, deadline):
+def new_project(name, description, deadline):
     uid = sessionsystem.session_uid()
     try:
         # I learned that an INSERT can also return a value if the RETURNING <column> is used
@@ -46,26 +46,35 @@ def new_project(name, description, users, deadline):
         db.session.commit()
     except Exception as e:
         return e
+    return True
 
-    # Add other users to ProjectUsers
-    # TODO: Fix mass-adding users to a project
-    for user in users:
-        user = user.strip()
+
+def add_user_to_project(username, project_id):
+    try:
+        sql_user = '''SELECT id FROM Users WHERE name = :name'''
+        res = db.session.execute(text(sql_user), {'name': username})
+        user_id = res.fetchone()
+    except Exception as e:
+        return e
+    if user_id:
         try:
-            sql_user = '''SELECT id FROM Users WHERE name = :name'''
-            res = db.session.execute(text(sql_user), {'name': user})
-            user_id = res.fetchone()
+            sql_user_in_project = '''SELECT uid, pid FROM ProjectUsers WHERE uid = :uid AND pid = :pid'''
+            res_in_project = db.session.execute(text(sql_user_in_project), {
+                                                'uid': user_id[0], 'pid': project_id})
+            in_project = res_in_project.fetchone()
         except Exception as e:
             return e
-        if user_id:
+        if in_project:
             try:
                 sql_user_to_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :user_id)'''
                 db.session.execute(text(sql_user_to_projectusers), {
-                                   'pid': int(pid[0]), 'user_id': user_id[0]})
+                                   'pid': int(project_id), 'user_id': user_id[0]})
                 db.session.commit()
             except Exception as e:
                 return e
-    return True
+            return True
+        return False
+    return False
 
 
 def get_project(name):

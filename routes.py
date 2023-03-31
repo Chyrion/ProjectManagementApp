@@ -51,12 +51,11 @@ def project_page():
             # new_project(name, description, users, deadline)
             project_name = request.form['project_name']
             project_description = request.form['project_description']
-            project_users = request.form['project_users'].split(',')
             project_deadline = request.form['project_deadline']
             if not project_deadline:
                 project_deadline = datetime.now().date()
             add = projects.new_project(
-                name=project_name, description=project_description, users=project_users, deadline=project_deadline)
+                name=project_name, description=project_description, deadline=project_deadline)
 
             # 'add' is a bool (True) if creating the project was successful, otherwise it is an Exception
             if type(add) != bool:
@@ -78,3 +77,11 @@ def projectview(id):
 @app.route('/newproject')
 def newproject():
     return render_template('./newproject.html')
+
+
+@app.route('/projectedit/<int:id>')
+def projectedit(id):
+    if request.method == 'GET':
+        return render_template('./projectedit.html', id=id)
+    else:
+        return redirect('/')
