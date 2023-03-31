@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <head>
   <title>Login - Project Management App</title>
+  <link href="../static/main.css" rel="stylesheet" />
 </head>
 <body>
-  <form action="/login" method="POST">
-    Name: <br />
-    <input type="text" name="username" required />
-    <br />
-    Password:
-    <br />
-    <input type="password" name="password" required />
-    <input type="submit" value="Login" />
-  </form>
-  <a href="/register">
-    <button>Register</button>
-  </a>
+  <div class="content-nonstandard">
+    <h1>Login</h1>
+    <form action="/login" method="POST">
+      Name: <br />
+      <input type="text" name="username" required />
+      <br />
+      Password:
+      <br />
+      <input type="password" name="password" required />
+      <input type="submit" value="Login" />
+    </form>
+    No account?
+    <a href="/register">
+      <button>Register</button>
+    </a>
+  </div>
 </body>

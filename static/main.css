@@ -23,6 +23,14 @@ body {
   grid-area: middle;
 }
 
+.content-nonstandard {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+}
+
 .navbar button {
   padding: 1em;
 }
