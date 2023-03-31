@@ -1,25 +1,39 @@
 body {
   margin: 0;
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .container {
   display: grid;
   grid-template:
-    'navbar navbar navbar' 100wv
-    'left content right' auto
-    'footer footer footer' 100wv;
+    'navbar navbar navbar' 5em
+    'left middle right' 1fr
+    'footer footer footer' 5em/0.25fr 1fr 0.25fr;
 }
 
 .navbar {
   display: flex;
   justify-content: center;
+  align-items: center;
+  grid-area: navbar;
+  gap: 1em;
+}
+
+.content {
+  grid-area: middle;
 }
 
 .navbar button {
   padding: 1em;
 }
 
-.project-item {
-  border: 0.2em solid red;
+.projectlist-item {
+  border: 0.2em solid rgb(152, 152, 152);
+  border-radius: 1em;
   margin: 0.2em 0;
+  background-color: rgb(241, 241, 241);
+}
+
+.project {
+  margin: 1em;
 }
