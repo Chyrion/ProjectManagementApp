@@ -29,6 +29,10 @@ def login():
 def register():
     if request.method == 'POST':
         username, password = request.form['username'], request.form['password']
+        if len(username) > 50:
+            return render_template('./error.html', error='Username too long')
+        if len(password) > 50:
+            return render_template('./error.html', error='Password too long')
         reg = sessionsystem.register(username, password)
         if not reg:
             return render_template('./error.html', error='Error registering')
