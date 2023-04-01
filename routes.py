@@ -81,16 +81,39 @@ def newproject():
 
 @app.route('/projectedit/<int:id>', methods=['GET', 'POST'])
 def projectedit(id):
-    if request.method == 'GET':
-        return render_template('./projectedit.html', id=id)
-    else:
-        if request.form['project_name']:
-            new_name = request.form['project_name']
-            projects.update_project_name(id, new_name)
-        if request.form['project_description']:
-            new_description = request.form['project_description']
-            projects.update_project_description(id, new_description)
-        if request.form['project_deadline']:
-            new_deadline = request.form['project_deadline']
-            projects.update_project_deadline(id, new_deadline)
-        return redirect(f'/projectview/{id}')
+    if projects.verify_user_in_project(pid=id, uid=sessionsystem.session_uid()):
+        if request.method == 'GET':
+            return render_template('./projectedit.html', id=id)
+        else:
+            if request.form['project_name']:
+                new_name = request.form['project_name']
+                projects.update_project_name(id, new_name)
+            if request.form['project_description']:
+                new_description = request.form['project_description']
+                projects.update_project_description(id, new_description)
+            if request.form['project_deadline']:
+                new_deadline = request.form['project_deadline']
+                projects.update_project_deadline(id, new_deadline)
+            return redirect(f'/projectview/{id}')
+
+
+@app.route('/projectusers/<int:id>', methods=['GET', 'POST'])
+def projectusers(id):
+    if projects.verify_user_in_project(pid=id, uid=sessionsystem.session_uid()):
+        users = projects.get_project_users(id)
+        if type(users) == Exception:
+            return render_template('./error.html', error=users)
+        return render_template('./projectusers.html', id=id, users=users)
+
+
+@app.route('/projectusers/adduser/<int:id>', methods=['GET', 'POST'])
+def projectusers_add(id):
+    if projects.verify_user_in_project(pid=id, uid=sessionsystem.session_uid()):
+        if request.method == 'GET':
+            return redirect('/')
+        else:
+            user_to_add = request.form['username']
+            add = projects.add_user_to_project(user_to_add, id)
+            if type(add) != bool:
+                return render_template('./error.html', error=add)
+            return redirect(f'/projectusers/{id}')

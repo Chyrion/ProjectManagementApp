@@ -1,0 +1,26 @@
+{% extends 'layout.html' %} {% block title %}Project Users{% endblock %} {%
+block content %}
+<!-- This script prevents resubmitting forms, which can create duplicate entries in the database -->
+<script>
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
+<div class="content">
+  <h3>Users</h3>
+  {% if users %} {% for user in users %}
+  <p>{{ user[0] }}</p>
+  {% endfor %} {% else %}
+  <p>No users</p>
+  {% endif %}
+  <form action="/projectusers/adduser/{{ id }}" method="POST">
+    <h4>Add user</h4>
+    <input type="text" name="username" />
+    <br />
+    <input type="submit" value="Add" />
+  </form>
+  <a href="/projectview/{{ id }}">
+    <button>Back to project</button>
+  </a>
+</div>
+{% endblock %}

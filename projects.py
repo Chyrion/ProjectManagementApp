@@ -68,7 +68,7 @@ def add_user_to_project(username, project_id):
             in_project = res_in_project.fetchone()
         except Exception as e:
             return e
-        if in_project:
+        if not in_project:
             try:
                 sql_user_to_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :user_id)'''
                 db.session.execute(text(sql_user_to_projectusers), {
@@ -77,8 +77,8 @@ def add_user_to_project(username, project_id):
             except Exception as e:
                 return e
             return True
-        return False
-    return False
+        return 'User already in project'
+    return 'User not found'
 
 
 def get_project(name):
@@ -111,6 +111,16 @@ def get_project(id):
                    'status': project_res[4]
                    }
         return project
+    except Exception as e:
+        return e
+
+
+def get_project_users(id):
+    try:
+        sql = '''SELECT U.name FROM Users U, ProjectUsers PU WHERE PU.pid = :id AND PU.uid = U.id'''
+        res = db.session.execute(text(sql), {'id': id})
+        users = res.fetchall()
+        return users
     except Exception as e:
         return e
 
