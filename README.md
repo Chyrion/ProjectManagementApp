@@ -10,12 +10,12 @@ A web application for handling co-operative projects.
 - Users have a dashboard that acts as an overview of ongoing projects that they are a part of (x)
   - Tasks are marked: not started, in progress, done, (late)
 - Creating new projects: (x)
-  - Enter project name, description, tasks, (deadline(s)), members (x)
+  - Enter project name, description, deadline(s), members (x)
 - Project view
   - User can see details of the project (x)
   - Tasks can be marked as: not started, in progress, done
   - Project is marked as done when all tasks are done
-  - Creator of the project can edit the details, or remove the project
+  - Creator of the project can edit the details, or remove the project (partial x)
     - Maybe: Other users can be given permissions for editing
   - Maybe: Projects have internal messaging (will implement if there is sufficient time)
 
