@@ -6,7 +6,7 @@ content %}
   <p>
     Deadline: {{ project['deadline'].day }} {{
     project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in {{
-    timeleft.days }} days)
+    (project['deadline']-date).days }} days)
   </p>
 
   <a href='/projectedit/{{ project["id"] }}'>

@@ -73,7 +73,7 @@ def project_page():
 def projectview(id):
     if projects.verify_user_in_project(pid=id, uid=sessionsystem.session_uid()):
         project = projects.get_project(id=id)
-        return render_template('./projectview.html', project=project, timeleft=timedelta(project['deadline'].day-datetime.now().day))
+        return render_template('./projectview.html', project=project, date=datetime.now().date())
     else:
         return redirect('/')
 
