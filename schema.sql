@@ -14,5 +14,14 @@ CREATE TABLE Projects (
 
 CREATE TABLE ProjectUsers (
     pid INTEGER,
-    uid INTEGER
+    uid INTEGER,
+    permission INTEGER
+);
+
+CREATE TABLE ProjectTasks (
+    id SERIAL PRIMARY KEY,
+    pid INTEGER,
+    name TEXT,
+    description TEXT,
+    deadline DATE NOT NULL DEFAULT CURRENT_DATE
 );

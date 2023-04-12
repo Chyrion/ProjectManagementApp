@@ -8,7 +8,7 @@ content %}
     project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in {{
     (project['deadline']-date).days }} days)
   </p>
-
+  {% if permission == 1 %}
   <a href='/projectedit/{{ project["id"] }}'>
     <button>Edit project</button>
   </a>
@@ -16,5 +16,6 @@ content %}
   <a href='/projectusers/{{ project["id"] }}'>
     <button>Manage users</button>
   </a>
+  {% endif %}
 </div>
 {% endblock %}

@@ -44,9 +44,9 @@ def new_project(name, description, deadline):
 
     # Add creator of project to ProjectUsers
     try:
-        sql_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :uid)'''
+        sql_projectusers = '''INSERT INTO ProjectUsers (pid, uid, permission) VALUES (:pid, :uid, :permission)'''
         db.session.execute(text(sql_projectusers), {
-                           'pid': int(pid[0]), 'uid': int(uid)})
+                           'pid': int(pid[0]), 'uid': int(uid), 'permission': 1})
         db.session.commit()
     except Exception as e:
         return e
@@ -70,9 +70,9 @@ def add_user_to_project(username, project_id):
             return e
         if not in_project:
             try:
-                sql_user_to_projectusers = '''INSERT INTO ProjectUsers (pid, uid) VALUES (:pid, :user_id)'''
+                sql_user_to_projectusers = '''INSERT INTO ProjectUsers (pid, uid, permission) VALUES (:pid, :user_id, :permission)'''
                 db.session.execute(text(sql_user_to_projectusers), {
-                                   'pid': int(project_id), 'user_id': user_id[0]})
+                                   'pid': int(project_id), 'user_id': user_id[0], 'permission': 0})
                 db.session.commit()
             except Exception as e:
                 return e
@@ -125,16 +125,16 @@ def get_project_users(id):
         return e
 
 
-def verify_user_in_project(pid, uid):
+def get_user_in_project(pid, uid):
     try:
-        sql = '''SELECT uid FROM ProjectUsers WHERE uid = :uid AND pid = :pid'''
+        sql = '''SELECT uid, permission FROM ProjectUsers WHERE uid = :uid AND pid = :pid'''
         res = db.session.execute(text(sql), {'uid': uid, 'pid': pid})
-        user_in = res.fetchone()
+        user = res.fetchone()
     except Exception as e:
         return e
-    if not user_in:
+    if not user:
         return False
-    return True
+    return user
 
 
 def update_project_name(id, name):
