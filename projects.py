@@ -53,6 +53,30 @@ def new_project(name, description, deadline):
     return True
 
 
+def delete_project(pid):
+    try:
+        sql = '''DELETE FROM Projects WHERE id = :pid'''
+        db.session.execute(text(sql), {'pid': pid})
+        db.session.commit()
+        del_from_pu = delete_project_from_projectusers(pid)
+        if type(del_from_pu) == bool:
+            return True
+        else:
+            return del_from_pu
+    except Exception as e:
+        return e
+
+
+def delete_project_from_projectusers(pid):
+    try:
+        sql = '''DELETE FROM ProjectUsers WHERE pid = :pid'''
+        db.session.execute(text(sql), {'pid': pid})
+        db.session.commit()
+        return True
+    except Exception as e:
+        return e
+
+
 def add_user_to_project(username, project_id):
     try:
         sql_user = '''SELECT id FROM Users WHERE name = :name'''
@@ -189,3 +213,13 @@ def demote_user(pid, uid):
             db.session.commit()
         except Exception as e:
             return e
+
+
+def remove_user_from_project(pid, uid):
+    try:
+        sql = '''DELETE FROM ProjectUsers WHERE pid = :pid AND uid = :uid'''
+        db.session.execute(text(sql), {'pid': pid, 'uid': uid})
+        db.session.commit()
+        return True
+    except Exception as e:
+        return e

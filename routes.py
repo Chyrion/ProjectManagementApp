@@ -105,6 +105,19 @@ def projectedit(id):
     return redirect('/')
 
 
+@app.route('/projectedit/delete/<int:id>', methods=['POST'])
+def projectedit_deleteproject(id):
+    if projects.get_user_in_project(pid=id, uid=sessionsystem.session_uid())[1] == 1:
+        if request.method == 'POST':
+            deleted = projects.delete_project(id)
+            if type(deleted) != bool:
+                return render_template('./error.html', error=deleted)
+            else:
+                return redirect('/')
+        return redirect('/')
+    return redirect('/')
+
+
 @app.route('/projectusers/<int:id>', methods=['GET', 'POST'])
 def projectusers(id):
     if projects.get_user_in_project(pid=id, uid=sessionsystem.session_uid())[1] == 1:

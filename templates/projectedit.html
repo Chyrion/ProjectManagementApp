@@ -18,5 +18,8 @@ content %}
     <br />
     <input type="submit" value="Confirm" />
   </form>
+  <form action="/projectedit/delete/{{ id }}" method="POST">
+    <input type="submit" value="Delete project" class="btn-delete" />
+  </form>
 </div>
 {% endblock %}
