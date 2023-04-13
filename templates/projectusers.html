@@ -9,7 +9,21 @@ block content %}
 <div class="content">
   <h3>Users</h3>
   {% if users %} {% for user in users %}
-  <p>{{ user[0] }}</p>
+  <div class="userlist-user">
+    <p>{{ user[0] }}</p>
+    {% if user[2] == 0 %}
+    <p style="color: rgb(100, 100, 100)">Member</p>
+    {% elif user[2] == 1 %}
+    <p style="color: rgb(100, 100, 100)">Admin</p>
+    {% endif %} {% if user[2] == 0 %}
+    <form
+      action="/projectusers/elevateuser/{{ id }}&{{ user[1] }}"
+      method="POST"
+    >
+      <input type="submit" value="Elevate user" />
+    </form>
+    {% endif %}
+  </div>
   {% endfor %} {% else %}
   <p>No users</p>
   {% endif %}

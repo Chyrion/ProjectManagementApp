@@ -117,7 +117,7 @@ def get_project(id):
 
 def get_project_users(id):
     try:
-        sql = '''SELECT U.name FROM Users U, ProjectUsers PU WHERE PU.pid = :id AND PU.uid = U.id'''
+        sql = '''SELECT U.name, U.id, PU.permission FROM Users U, ProjectUsers PU WHERE PU.pid = :id AND PU.uid = U.id'''
         res = db.session.execute(text(sql), {'id': id})
         users = res.fetchall()
         return users
@@ -169,3 +169,12 @@ def update_project_deadline(id, deadline):
     except Exception as e:
         return e
     return True
+
+
+def elevate_user(pid, uid):
+    try:
+        sql = '''UPDATE ProjectUsers SET permission = 1 WHERE pid = :pid AND uid = :uid'''
+        db.session.execute(text(sql), {'pid': pid, 'uid': uid})
+        db.session.commit()
+    except Exception as e:
+        return e

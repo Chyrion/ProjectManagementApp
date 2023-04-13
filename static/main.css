@@ -54,3 +54,14 @@ body {
 .project {
   margin: 1em;
 }
+
+.userlist-user {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5em 0;
+  align-items: center;
+}
+
+.userlist-user p {
+  margin: 0 0.5em;
+}

@@ -127,3 +127,11 @@ def projectusers_add(id):
                 return render_template('./error.html', error=add)
             return redirect(f'/projectusers/{id}')
     return redirect('/')
+
+
+@app.route('/projectusers/elevateuser/<int:project_id>&<int:user_id>', methods=['GET', 'POST'])
+def projectusers_elevate(project_id, user_id):
+    if request.method == 'POST':
+        projects.elevate_user(project_id, user_id)
+        return redirect(f'/projectusers/{project_id}')
+    return redirect('/')

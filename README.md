@@ -15,8 +15,8 @@ A web application for handling co-operative projects.
   - User can see details of the project (x)
   - Tasks can be marked as: not started, in progress, done
   - Project is marked as done when all tasks are done
-  - Creator of the project can edit the details, or remove the project (partial x)
-    - Maybe: Other users can be given permissions for editing
+  - Creator of the project can edit the details, or remove the project (x)
+    - Other users can be given permissions for editing (x)
   - Maybe: Projects have internal messaging (will implement if there is sufficient time)
 
 ### Structure
