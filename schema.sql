@@ -16,7 +16,7 @@ CREATE TABLE ProjectUsers (
     pid INTEGER,
     uid INTEGER,
     permission INTEGER,
-    creator BOOLEAN
+    creator BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE ProjectTasks (

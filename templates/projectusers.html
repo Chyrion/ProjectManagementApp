@@ -13,16 +13,22 @@ block content %}
     <p>{{ user[0] }}</p>
     {% if user[2] == 0 %}
     <p style="color: rgb(100, 100, 100)">Member</p>
-    {% elif user[2] == 1 %}
-    <p style="color: rgb(100, 100, 100)">Admin</p>
-    {% endif %} {% if user[2] == 0 %}
     <form
       action="/projectusers/elevateuser/{{ id }}&{{ user[1] }}"
       method="POST"
     >
       <input type="submit" value="Elevate user" />
     </form>
-    {% endif %}
+    {% elif user[2] == 1 %}
+    <p style="color: rgb(100, 100, 100)">Admin</p>
+    {% if not user[3] %}
+    <form
+      action="/projectusers/demoteuser/{{ id }}&{{ user[1] }}"
+      method="POST"
+    >
+      <input type="submit" value="Demote user" />
+    </form>
+    {% endif %} {% endif %} {% if user[2] == 0 %} {% endif %}
   </div>
   {% endfor %} {% else %}
   <p>No users</p>
