@@ -5,7 +5,7 @@ A web application for handling co-operative projects.
 
 ## Functionality
 
-#### Implemented
+### Implemented
 
 - Users have a dashboard that acts as an overview of ongoing projects that they are a part of
 - Creating new projects: Enter project name, description, deadline(s), members
@@ -14,13 +14,13 @@ A web application for handling co-operative projects.
   - Creator of the project can edit the details, or remove the project
     - Other users can be given permissions for editing
 
-#### To-Do
+### To-Do
 
 - Projects are marked: not started, in progress, done, (late)
 - Tasks can be marked as: not started, in progress, done
 - Project is marked as done when all tasks are done
 
-#### Maybe
+### Maybe
 
 - Maybe: Projects have internal messaging (will implement if there is sufficient time)
 
