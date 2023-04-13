@@ -3,13 +3,11 @@
 A web application for handling co-operative projects.
 [Available on fly.io](http://tsoha-project-management-app.fly.dev/)
 
-(Functionality marked with (x) has been implemented)
-
 ## Functionality
 
 #### Implemented
 
-- Users have a dashboard that acts as an overview of ongoing projects that they are a part of (x)
+- Users have a dashboard that acts as an overview of ongoing projects that they are a part of
 - Creating new projects: Enter project name, description, deadline(s), members
 - Project view
   - User can see details of the project
@@ -22,7 +20,7 @@ A web application for handling co-operative projects.
 - Tasks can be marked as: not started, in progress, done
 - Project is marked as done when all tasks are done
 
-### Maybe
+#### Maybe
 
 - Maybe: Projects have internal messaging (will implement if there is sufficient time)
 
