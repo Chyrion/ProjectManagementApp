@@ -1,7 +1,7 @@
 # Project Management Application
 
 A web application for handling co-operative projects.
-[Available on fly.io](tsoha-project-management-app.fly.dev)
+[Available on fly.io](http://tsoha-project-management-app.fly.dev/)
 
 (Functionality marked with (x) has been implemented)
 
