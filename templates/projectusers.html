@@ -11,7 +11,11 @@ block content %}
   {% if users %} {% for user in users %}
   <div class="userlist-user">
     <p>{{ user[0] }}</p>
-    {% if user[2] == 0 %}
+
+    {% if user[3] %}
+    <p style="color: rgb(100, 100, 100)">Creator</p>
+
+    {% else %} {% if user[2] == 0 %}
     <p style="color: rgb(100, 100, 100)">Member</p>
     <form
       action="/projectusers/elevateuser/{{ id }}&{{ user[1] }}"
@@ -19,16 +23,23 @@ block content %}
     >
       <input type="submit" value="Elevate user" />
     </form>
+
     {% elif user[2] == 1 %}
     <p style="color: rgb(100, 100, 100)">Admin</p>
-    {% if not user[3] %}
     <form
       action="/projectusers/demoteuser/{{ id }}&{{ user[1] }}"
       method="POST"
     >
       <input type="submit" value="Demote user" />
     </form>
-    {% endif %} {% endif %} {% if user[2] == 0 %} {% endif %}
+    {% endif %}
+    <form
+      action="/projectusers/removeuser/{{ id }}&{{ user[1] }}"
+      method="POST"
+    >
+      <input type="submit" value="Remove user" />
+    </form>
+    {% endif %}
   </div>
   {% endfor %} {% else %}
   <p>No users</p>

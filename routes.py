@@ -120,7 +120,11 @@ def projectedit_deleteproject(id):
 
 @app.route('/projectusers/<int:id>', methods=['GET', 'POST'])
 def projectusers(id):
-    if projects.get_user_in_project(pid=id, uid=sessionsystem.session_uid())[1] == 1:
+    user_in_project = projects.get_user_in_project(
+        pid=id, uid=sessionsystem.session_uid())
+    if not user_in_project:
+        return redirect('/')
+    elif user_in_project[1] == 1:
         users = projects.get_project_users(id)
         if type(users) == Exception:
             return render_template('./error.html', error=users)
@@ -139,6 +143,23 @@ def projectusers_add(id):
             if type(add) != bool:
                 return render_template('./error.html', error=add)
             return redirect(f'/projectusers/{id}')
+    return redirect('/')
+
+
+@app.route('/projectusers/removeuser/<int:pid>&<int:uid>', methods=['GET', 'POST'])
+def projectusers_removeuser(pid, uid):
+    user_in_project = projects.get_user_in_project(
+        pid=pid, uid=sessionsystem.session_uid())
+    if not user_in_project:
+        return redirect('/')
+    elif user_in_project[1] == 1:
+        if request.method == 'GET':
+            return redirect('/')
+        else:
+            add = projects.remove_user_from_project(pid=pid, uid=uid)
+            if type(add) != bool:
+                return render_template('./error.html', error=add)
+            return redirect(f'/projectusers/{pid}')
     return redirect('/')
 
 
