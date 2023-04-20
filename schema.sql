@@ -26,3 +26,8 @@ CREATE TABLE ProjectTasks (
     description TEXT,
     deadline DATE NOT NULL DEFAULT CURRENT_DATE
 );
+
+CREATE TABLE TasksUsers (
+    tid INTEGER REFERENCES ProjectTasks(id),
+    uid INTEGER REFERENCES Users(id)
+);
