@@ -13,11 +13,12 @@ A web application for handling co-operative projects.
   - User can see details of the project
   - Creator of the project can edit the details, or remove the project
     - Other users can be given permissions for editing
+  - Tasks can be added to projects
+    - Tasks can be marked as: in progress, done
 
 ### To-Do
 
 - Projects are marked: not started, in progress, done, (late)
-- Tasks can be marked as: not started, in progress, done
 - Project is marked as done when all tasks are done
 
 ### Maybe
