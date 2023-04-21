@@ -8,7 +8,7 @@ endblock %} {% block content %}
     project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in {{
     (project['deadline']-date).days }} days)
   </p>
-  {% if permission == 1 %}
+  {% if user[1] == 1 %}
   <div class="projectedit-btns">
     <a href='/projectedit/{{ project["id"] }}'>
       <button>Edit project</button>
@@ -22,30 +22,50 @@ endblock %} {% block content %}
   {% endif %}
   <h3>Tasks</h3>
   {% if tasks %} {% for task in tasks %}
-  <a
-    class="projectlist-item-a"
-    href='/projectview/{{ project["id"] }}/taskview/{{ task["id"] }}'
-    id='{{ task["id"] }}'
-    title="View task"
-  >
-    <div class="projectlist-item">
-      <div class="project">
-        <h4>{{ task['name'] }}</h4>
-        <p>{{ task['description'] }}</p>
-        <p>
-          Deadline: {{ task['deadline'].day }} {{
-          task['deadline'].strftime("%B") }} {{ task['deadline'].year }} (in {{
-          (task['deadline']-date).days }} days)
-        </p>
-        <h5>Users</h5>
-        {% if task['users']|length > 0 %} {% for user in task['users'] %}
-        <p>{{ user }}</p>
-        {% endfor %} {% else %}
-        <p>No users assigned</p>
-        {% endif %}
-      </div>
+  <div class="tasklist-item">
+    <div class="{{ 'task-wip' if task['status'] == -1 else 'task-done' }}">
+      <h4>{{ task['name'] }}</h4>
+      <p>{{ task['description'] }}</p>
+      <p>
+        Deadline: {{ task['deadline'].day }} {{ task['deadline'].strftime("%B")
+        }} {{ task['deadline'].year }} (in {{ (task['deadline']-date).days }}
+        days)
+      </p>
+      {% if user[1] == 1 %}
+      <a href='/projectedit/{{ project["id"] }}/taskedit/{{ task["id"] }}'>
+        <button>Edit task</button>
+      </a>
+      <form
+        action='/projectedit/{{ project["id"] }}/taskadduser/{{ task["id"] }}'
+        method="POST"
+      >
+        <input type="text" name="username" placeholder="Username" />
+        <input type="submit" value="Add user" />
+      </form>
+      {% endif %} {% if user[3] in task['users'][0] %} {% if task['status'] ==
+      -1 %}
+      <a
+        href='/projectedit/{{ project["id"] }}/taskchangestatus/{{ task["id"] }}'
+      >
+        <button>Mark as done</button>
+      </a>
+      {% elif task['status'] == 1 %}
+      <a
+        href='/projectedit/{{ project["id"] }}/taskchangestatus/{{ task["id"] }}'
+      >
+        <button>Mark as incomplete</button>
+      </a>
+      {% endif %} {% endif %}
+
+      <h5>Users</h5>
+      {% if task['users']|length > 0 %} {% for user in task['users'] %}
+      <p class="task-user">{{ user[0] }}</p>
+
+      {% endfor %} {% else %}
+      <p>No users assigned</p>
+      {% endif %}
     </div>
-  </a>
+  </div>
   {% endfor %} {% else %}
   <p>No tasks!</p>
   {% endif %}

@@ -75,3 +75,26 @@ body {
   background-color: rgb(97, 0, 0);
   color: white;
 }
+
+.tasklist-item-a {
+  color: black;
+  text-decoration: none;
+}
+
+.tasklist-item p,
+.tasklist-item h4,
+.tasklist-item h5 {
+  margin: 0.1em 0 0.5em;
+}
+
+.tasklist-item {
+  margin-bottom: 3em;
+}
+
+.task-wip {
+  background-color: bisque;
+}
+
+.task-done {
+  background-color: rgba(114, 180, 0, 0.235);
+}
