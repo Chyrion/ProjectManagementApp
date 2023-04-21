@@ -1,5 +1,6 @@
 from app import app
 import projects
+import tasks
 import sessionsystem
 from datetime import datetime, timedelta
 from flask import render_template, request, request, redirect
@@ -76,7 +77,8 @@ def projectview(project_id):
     if user:
         user_permission = user[1]
         project = projects.get_project(id=project_id)
-        return render_template('./projectview.html', project=project, permission=user_permission, date=datetime.now().date())
+        project_tasks = tasks.get_tasks(pid=project_id)
+        return render_template('./projectview.html', project=project, permission=user_permission, date=datetime.now().date(), tasks=project_tasks)
     else:
         return redirect('/')
 
@@ -103,6 +105,31 @@ def projectedit(id):
                 projects.update_project_deadline(id, new_deadline)
             return redirect(f'/projectview/{id}')
     return redirect('/')
+
+
+@app.route('/projectedit/addtask/<int:id>', methods=['GET', 'POST'])
+def projectedit_addtask(id):
+    if projects.get_user_in_project(pid=id, uid=sessionsystem.session_uid())[1] == 1:
+        if request.method == 'GET':
+            return render_template('./addtask.html', id=id)
+        elif request.method == 'POST':
+            task_name = request.form['task_name']
+            task_description = request.form['task_description']
+            task_deadline = request.form['task_deadline']
+            add = tasks.add_task(
+                id, task_name, task_description, task_deadline)
+            if type(add) == bool:
+                return redirect(f'/projectview/{id}')
+            return render_template('./error.html', error=add)
+    return redirect('/')
+
+
+@app.route('/projectview/<int:project_id>/taskview/<int:task_id>', methods=['GET', 'POST'])
+def projectview_taskview(project_id, task_id):
+    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
+        if request.method == 'GET':
+            task = tasks.get_task(project_id, task_id)
+            return render_template('./taskview.html', task=task, date=datetime.now().date())
 
 
 @app.route('/projectedit/delete/<int:id>', methods=['POST'])

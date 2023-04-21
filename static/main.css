@@ -55,6 +55,11 @@ body {
   margin: 1em;
 }
 
+.projectedit-btns {
+  display: flex;
+  flex-direction: row;
+}
+
 .userlist-user {
   display: flex;
   flex-direction: row;

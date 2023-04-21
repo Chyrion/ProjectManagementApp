@@ -1,7 +1,7 @@
-{% extends 'layout.html' %} {% block title %}Edit Project{% endblock %} {% block
-content %}
+{% extends 'layout.html' %} {% block title %}Project: {{ project['name'] }}{%
+endblock %} {% block content %}
 <div class="project-info">
-  <h3>{{ project['name'] }}</h3>
+  <h2>{{ project['name'] }}</h2>
   <p>{{ project['description'] }}</p>
   <p>
     Deadline: {{ project['deadline'].day }} {{
@@ -9,13 +9,48 @@ content %}
     (project['deadline']-date).days }} days)
   </p>
   {% if permission == 1 %}
-  <a href='/projectedit/{{ project["id"] }}'>
-    <button>Edit project</button>
-  </a>
-  <br />
-  <a href='/projectusers/{{ project["id"] }}'>
-    <button>Manage users</button>
-  </a>
+  <div class="projectedit-btns">
+    <a href='/projectedit/{{ project["id"] }}'>
+      <button>Edit project</button>
+    </a>
+    <br />
+    <a href='/projectusers/{{ project["id"] }}'>
+      <button>Manage users</button>
+    </a>
+  </div>
+
   {% endif %}
+  <h3>Tasks</h3>
+  {% if tasks %} {% for task in tasks %}
+  <a
+    class="projectlist-item-a"
+    href='/projectview/{{ project["id"] }}/taskview/{{ task["id"] }}'
+    id='{{ task["id"] }}'
+    title="View task"
+  >
+    <div class="projectlist-item">
+      <div class="project">
+        <h4>{{ task['name'] }}</h4>
+        <p>{{ task['description'] }}</p>
+        <p>
+          Deadline: {{ task['deadline'].day }} {{
+          task['deadline'].strftime("%B") }} {{ task['deadline'].year }} (in {{
+          (task['deadline']-date).days }} days)
+        </p>
+        <h5>Users</h5>
+        {% if task['users']|length > 0 %} {% for user in task['users'] %}
+        <p>{{ user }}</p>
+        {% endfor %} {% else %}
+        <p>No users assigned</p>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+  {% endfor %} {% else %}
+  <p>No tasks!</p>
+  {% endif %}
+  <a href='/projectedit/addtask/{{ project["id"] }}'>
+    <button>Add task</button>
+  </a>
 </div>
 {% endblock %}

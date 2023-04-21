@@ -25,7 +25,7 @@ def get_all_projects():
         return e
 
 
-def new_project(name, description, deadline):
+def new_project(name, description, deadline=None):
     if len(name) > 100:
         return 'Project name is too long'
     if len(description) > 250:

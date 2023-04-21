@@ -1,0 +1,23 @@
+{% extends 'layout.html' %} {% block title %}Task: {{ task['name'] }}{% endblock
+%} {% block content %}
+<div class="project-info">
+  <h2>{{ task['name'] }}</h2>
+  <p>{{ task['description'] }}</p>
+  <p>
+    Deadline: {{ task['deadline'].day }} {{ task['deadline'].strftime("%B") }}
+    {{ task['deadline'].year }} (in {{ (task['deadline']-date).days }} days)
+  </p>
+  {% if permission == 1 %}
+  <div class="projectedit-btns">
+    <a href='/projectedit/{{ project["id"] }}'>
+      <button>Edit task</button>
+    </a>
+    <br />
+    <a href='/projectusers/{{ project["id"] }}'>
+      <button>Manage users</button>
+    </a>
+  </div>
+
+  {% endif %}
+</div>
+{% endblock %}
