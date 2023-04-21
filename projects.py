@@ -105,23 +105,6 @@ def add_user_to_project(username, project_id):
     return 'User not found'
 
 
-def get_project(name):
-    try:
-        sql = '''SELECT id, name, description, deadline, status FROM Projects WHERE name = :name'''
-        res = db.session.execute(text(sql), {'name': name})
-        project_res = res.fetchone()
-        # Formatting the result into a nicer form to use elsewhere
-        project = {'id': project_res[0],
-                   'name': project_res[1],
-                   'description': project_res[2],
-                   'deadline': project_res[3],
-                   'status': project_res[4]
-                   }
-        return project
-    except Exception as e:
-        return e
-
-
 def get_project(id):
     try:
         sql = '''SELECT id, name, description, deadline, status FROM Projects WHERE id = :id'''
@@ -149,10 +132,36 @@ def get_project_users(id):
         return e
 
 
-def get_user_in_project(pid, uid):
+def get_user_in_project(pid, username=None, uid=None):
+    if uid:
+        try:
+            sql = '''SELECT PU.uid, PU.permission, PU.creator, U.name FROM ProjectUsers PU, Users U WHERE PU.uid = :uid AND PU.pid = :pid AND U.id = PU.uid'''
+            res = db.session.execute(text(sql), {'uid': uid, 'pid': pid})
+            user = res.fetchone()
+        except Exception as e:
+            return e
+        if not user:
+            return False
+        return user
+    if username:
+        try:
+            sql = text(
+                '''SELECT PU.uid, PU.permission, PU.creator FROM ProjectUsers PU, Users U WHERE U.name = :username AND U.id = PU.uid AND PU.pid = :pid''')
+            res = db.session.execute(
+                sql, {'username': username, 'pid': pid})
+            user = res.fetchone()
+        except Exception as e:
+            return e
+        if not user:
+            return False
+        return user
+
+
+# def get_user_in_project(pid, username: str):
     try:
-        sql = '''SELECT uid, permission, creator FROM ProjectUsers WHERE uid = :uid AND pid = :pid'''
-        res = db.session.execute(text(sql), {'uid': uid, 'pid': pid})
+        sql = text(
+            '''SELECT PU.uid, PU.permission, PU.creator FROM ProjectUsers PU, Users U WHERE U.name = :username AND U.id = PU.uid''')
+        res = db.session.execute(text(sql), {'username': username, 'pid': pid})
         user = res.fetchone()
     except Exception as e:
         return e
