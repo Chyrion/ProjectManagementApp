@@ -45,7 +45,7 @@ def logout():
     return True
 
 
-def session_uid():
+def session_uid() -> int:
     return session.get('uid', 0)
 
 
