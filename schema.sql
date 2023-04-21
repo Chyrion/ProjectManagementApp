@@ -24,10 +24,12 @@ CREATE TABLE ProjectTasks (
     pid INTEGER,
     name TEXT,
     description TEXT,
-    deadline DATE NOT NULL DEFAULT CURRENT_DATE
+    deadline DATE NOT NULL DEFAULT CURRENT_DATE,
+    status INTEGER
 );
 
 CREATE TABLE TasksUsers (
     tid INTEGER REFERENCES ProjectTasks(id),
-    uid INTEGER REFERENCES Users(id)
+    uid INTEGER REFERENCES Users(id),
+    permission INTEGER
 );
