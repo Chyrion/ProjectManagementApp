@@ -5,7 +5,7 @@ from sqlalchemy.sql import text
 
 def get_tasks(pid):
     try:
-        sql = text('''SELECT * FROM ProjectTasks WHERE pid = :pid''')
+        sql = text('''SELECT * FROM ProjectTasks WHERE pid = :pid ORDER BY id''')
         res = db.session.execute(sql, {'pid': pid})
         tasks = res.fetchall()
         new_tasks = []
