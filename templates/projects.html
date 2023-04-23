@@ -16,7 +16,9 @@ content %}
   href='/projectview/{{ project["id"] }}'
   title="View project"
 >
-  <div class="projectlist-item">
+  <div
+    class="projectlist-item {{ 'done' if project['status'] == 2 else 'wip' if project['status'] == 1 else 'notstarted' if project['status'] == 0 else 'late' if project['status'] == 3 else 'somethingwrong' }}"
+  >
     <div class="project">
       <h3>{{ project['name'] }}</h3>
       <p>{{ project['description'] }}</p>
@@ -24,6 +26,11 @@ content %}
         Deadline: {{ project['deadline'].day }} {{
         project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in
         {{ (project['deadline']-date).days }} days)
+      </p>
+      <p>
+        Status: {{ 'Done!' if project['status'] == 2 else 'In progress' if
+        project['status'] == 1 else 'Not started' if project['status'] == 0 else
+        'Late!' if project['status'] == 3 else 'Something wrong?' }}
       </p>
     </div>
   </div>

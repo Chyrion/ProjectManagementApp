@@ -66,6 +66,7 @@ def project_page():
             if type(add) != bool:
                 return render_template('./error.html', error=add)
         user_projects = projects.get_all_projects()
+        projects.refresh_projects(user_projects)
         return render_template('./projects.html', projects=user_projects, name=sessionsystem.session_username(), date=datetime.now().date())
     return redirect('/')
 

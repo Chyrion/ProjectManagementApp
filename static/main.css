@@ -51,6 +51,38 @@ body {
   background-color: rgb(194, 194, 194);
 }
 
+.notstarted {
+  background-color: rgb(241, 241, 241);
+}
+
+.notstarted:hover {
+  background-color: rgb(194, 194, 194);
+}
+
+.wip {
+  background-color: antiquewhite;
+}
+
+.wip:hover {
+  background-color: rgb(176, 168, 157);
+}
+
+.done {
+  background-color: rgba(114, 180, 0, 0.235);
+}
+
+.done:hover {
+  background-color: rgba(65, 102, 3, 0.235);
+}
+
+.late {
+  background-color: rgba(215, 3, 3, 0.43);
+}
+
+.late:hover {
+  background-color: rgba(145, 1, 1, 0.551);
+}
+
 .project {
   margin: 1em;
 }

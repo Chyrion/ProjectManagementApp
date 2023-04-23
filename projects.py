@@ -1,6 +1,7 @@
 from db import db
 import sessionsystem
 from sqlalchemy.sql import text
+import datetime
 
 
 def get_all_projects():
@@ -232,3 +233,12 @@ def remove_user_from_project(pid, uid):
         return True
     except Exception as e:
         return e
+
+
+def refresh_projects(projects):
+    current_date = datetime.datetime.now().date()
+    for project in projects:
+        if project['status'] < 2 and ((project['deadline']-current_date).days) < 0:
+            sql = text('''UPDATE Projects SET status = 3 WHERE id = :pid''')
+            db.session.execute(sql, {'pid': project['id']})
+            db.session.commit()
