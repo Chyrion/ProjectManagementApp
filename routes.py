@@ -74,10 +74,10 @@ def project_page():
 @app.route('/projectview/<int:project_id>')
 def projectview(project_id):
     user = projects.get_user_in_project(
-        pid=project_id, uid=sessionsystem.session_uid())
+        project_id=project_id, user_id=sessionsystem.session_uid())
     if user:
-        project = projects.get_project(id=project_id)
-        project_tasks = tasks.get_tasks(pid=project_id)
+        project = projects.get_project(project_id=project_id)
+        project_tasks = tasks.get_tasks(project_id=project_id)
 
         # I know there is a more compact way to do this, but any attempt I made broke the project page so ????
         tasks_status = 1
@@ -100,7 +100,7 @@ def newproject():
 
 @app.route('/projectedit/<int:project_id>', methods=['GET', 'POST'])
 def projectedit(project_id):
-    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
         if request.method == 'GET':
             return render_template('./projectedit.html', id=project_id)
         else:
@@ -120,7 +120,7 @@ def projectedit(project_id):
 
 @app.route('/projectedit/<int:project_id>/status/<int:status>', methods=['POST'])
 def projectedit_changestatus(project_id, status):
-    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
         update = projects.update_project_status(project_id, status)
         if update == Exception:
             return render_template('./error.html', error=update)
@@ -128,68 +128,9 @@ def projectedit_changestatus(project_id, status):
     return redirect('/')
 
 
-@app.route('/projectedit/addtask/<int:project_id>', methods=['GET', 'POST'])
-def projectedit_addtask(project_id):
-    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
-        if request.method == 'GET':
-            return render_template('./addtask.html', id=project_id)
-        elif request.method == 'POST':
-            task_name = request.form['task_name']
-            task_description = request.form['task_description']
-            task_deadline = request.form['task_deadline']
-            add = tasks.add_task(
-                project_id, task_name, task_description, task_deadline)
-            if add == Exception:
-                return render_template('./error.html', error=add)
-            projects.refresh_project_status(project_id)
-            return redirect(f'/projectview/{project_id}')
-    return redirect('/')
-
-
-@app.route('/projectedit/<int:project_id>/taskedit/<int:task_id>', methods=['GET', 'POST'])
-def projectedit_taskedit(project_id, task_id):
-    return redirect('/')
-
-
-@app.route('/projectedit/<int:project_id>/taskadduser/<int:task_id>', methods=['POST'])
-def projectedit_taskadduser(project_id, task_id):
-    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
-        username = request.form['username']
-        user_to_add_in = projects.get_user_in_project(
-            pid=project_id, username=username)
-
-        if user_to_add_in:
-            user_in_task = tasks.get_user_in_task(task_id, user_to_add_in[0])
-            if not user_in_task:
-                add = tasks.add_user_to_task(
-                    task_id, user_to_add_in[0], 0, False)
-                if add == Exception:
-                    return render_template('./error.html', error=add)
-                if add == 1:
-                    return redirect(f'/projectview/{project_id}')
-                return render_template('./error.html', error=add)
-            return render_template('./error.html', error='User already in task')
-        return render_template('./error.html', error=user_to_add_in)
-    return redirect('/')
-
-
-@app.route('/projectedit/<int:project_id>/taskchangestatus/<int:task_id>', methods=['POST'])
-def projectedit_taskchangestatus(project_id, task_id):
-    uid = sessionsystem.session_uid()
-    if projects.get_user_in_project(pid=project_id, uid=uid)[1] == 1:
-        change = tasks.change_task_status(project_id, task_id, uid)
-        if change == Exception:
-            return render_template('./error.html', error=change)
-        if change == False:
-            return render_template('./error.html', error='Error with user permissions')
-        projects.refresh_project_status(project_id)
-        return redirect(f'/projectview/{project_id}')
-    return redirect('/')
-
-
 @app.route('/projectedit/delete/<int:project_id>', methods=['POST'])
 def projectedit_deleteproject(project_id):
-    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
         if request.method == 'POST':
             deleted = projects.delete_project(project_id)
             if deleted == Exception:
@@ -202,7 +143,7 @@ def projectedit_deleteproject(project_id):
 @app.route('/projectusers/<int:project_id>', methods=['GET', 'POST'])
 def projectusers(project_id):
     user_in_project = projects.get_user_in_project(
-        pid=project_id, uid=sessionsystem.session_uid())
+        project_id=project_id, user_id=sessionsystem.session_uid())
     if not user_in_project:
         return redirect('/')
     elif user_in_project[1] == 1:
@@ -215,7 +156,7 @@ def projectusers(project_id):
 
 @app.route('/projectusers/adduser/<int:project_id>', methods=['GET', 'POST'])
 def projectusers_add(project_id):
-    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
         if request.method == 'GET':
             return redirect('/')
         else:
@@ -230,7 +171,7 @@ def projectusers_add(project_id):
 @app.route('/projectusers/removeuser/<int:project_id>&<int:user_id>', methods=['GET', 'POST'])
 def projectusers_removeuser(project_id, user_id):
     user_in_project = projects.get_user_in_project(
-        pid=project_id, uid=sessionsystem.session_uid())
+        project_id=project_id, user_id=sessionsystem.session_uid())
     if not user_in_project:
         return redirect('/')
     elif user_in_project[1] == 1:
@@ -259,3 +200,88 @@ def projectusers_demote(project_id, user_id):
         projects.demote_user(project_id, user_id)
         return redirect(f'/projectusers/{project_id}')
     return redirect('/')
+
+
+@app.route('/projectedit/addtask/<int:project_id>', methods=['GET', 'POST'])
+def projectedit_addtask(project_id):
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
+        if request.method == 'GET':
+            return render_template('./addtask.html', id=project_id)
+        elif request.method == 'POST':
+            task_name = request.form['task_name']
+            task_description = request.form['task_description']
+            task_deadline = request.form['task_deadline']
+            add = tasks.add_task(
+                project_id, task_name, task_description, task_deadline)
+            if add == Exception:
+                return render_template('./error.html', error=add)
+            projects.refresh_project_status(project_id)
+            return redirect(f'/projectview/{project_id}')
+    return redirect('/')
+
+
+@app.route('/projectedit/<int:project_id>/taskedit/<int:task_id>', methods=['GET', 'POST'])
+def projectedit_taskedit(project_id, task_id):
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
+        if request.method == 'GET':
+            return render_template('./edittask.html', project_id=project_id, task_id=task_id)
+        else:
+            if request.form['task_name']:
+                new_name = request.form['task_name']
+                tasks.update_task_name(task_id, new_name)
+            if request.form['task_description']:
+                new_description = request.form['task_description']
+                tasks.update_task_description(task_id, new_description)
+            if request.form['task_deadline']:
+                new_deadline = request.form['task_deadline']
+                tasks.update_task_deadline(task_id, new_deadline)
+            return redirect(f'/projectview/{project_id}')
+
+    return redirect('/')
+
+
+@app.route('/projectedit/<int:project_id>/taskadduser/<int:task_id>', methods=['POST'])
+def projectedit_taskadduser(project_id, task_id):
+    if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
+        username = request.form['username']
+        user_to_add_in = projects.get_user_in_project(
+            project_id=project_id, username=username)
+
+        if user_to_add_in:
+            user_in_task = tasks.get_user_in_task(task_id, user_to_add_in[0])
+            if not user_in_task:
+                add = tasks.add_user_to_task(
+                    task_id, user_to_add_in[0], 0, False)
+                if add == Exception:
+                    return render_template('./error.html', error=add)
+                if add == True:
+                    return redirect(f'/projectview/{project_id}')
+                return render_template('./error.html', error=add)
+            return render_template('./error.html', error='User already in task')
+        return render_template('./error.html', error=user_to_add_in)
+    return redirect('/')
+
+
+@app.route('/projectedit/<int:project_id>/taskchangestatus/<int:task_id>', methods=['POST'])
+def projectedit_taskchangestatus(project_id, task_id):
+    user_id = sessionsystem.session_uid()
+    if projects.get_user_in_project(project_id=project_id, user_id=user_id)[1] == 1:
+        change = tasks.change_task_status(project_id, task_id, user_id)
+        if change == Exception:
+            return render_template('./error.html', error=change)
+        if change == False:
+            return render_template('./error.html', error='Error with user permissions')
+        projects.refresh_project_status(project_id)
+        return redirect(f'/projectview/{project_id}')
+    return redirect('/')
+
+
+@app.route('/projectedit/<int:project_id>/deletetask/<int:task_id>', methods=['POST'])
+def projectedit_deletetask(project_id, task_id):
+    if request.method == 'POST':
+        if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
+            delete = tasks.delete_task(project_id, task_id)
+            if delete == Exception:
+                return render_template('./error.html', error=delete)
+            return redirect(f'/projectview/{project_id}')
+        return redirect('/')

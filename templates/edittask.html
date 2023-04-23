@@ -1,0 +1,26 @@
+{% extends 'layout.html' %} {% block title %}Edit Task{% endblock %} {% block
+content %}
+
+<div>
+  <h1>Edit task</h1>
+  <form
+    action="/projectedit/{{ project_id }}/taskedit/{{ task_id }}"
+    method="POST"
+  >
+    <h4>Task name</h4>
+    <input type="text" name="task_name" maxlength="100" />
+    <h4>Description</h4>
+    <input type="text" name="task_description" maxlength="250" />
+    <h4>Deadline</h4>
+    <input type="date" name="task_deadline" min="2023-01-01" max="2035-12-31" />
+    <br />
+    <input type="submit" value="Confirm" />
+  </form>
+  <form
+    action="/projectedit/{{ project_id }}/deletetask/{{ task_id }}"
+    method="POST"
+  >
+    <input type="submit" value="Delete task" class="btn-delete" />
+  </form>
+</div>
+{% endblock %}

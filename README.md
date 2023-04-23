@@ -15,15 +15,8 @@ A web application for handling co-operative projects.
     - Other users can be given permissions for editing
   - Tasks can be added to projects
     - Tasks can be marked as: in progress, done
-
-### To-Do
-
-- Projects are marked: not started, in progress, done, (late)
-- Project is marked as done when all tasks are done
-
-### Maybe
-
-- Maybe: Projects have internal messaging (will implement if there is sufficient time)
+  - Projects are marked: not started, in progress, done, (late)
+  - Project can be marked as done when all tasks are done
 
 ## Structure
 
