@@ -8,13 +8,28 @@ endblock %} {% block content %}
     project['deadline'].strftime("%B") }} {{ project['deadline'].year }} (in {{
     (project['deadline']-date).days }} days)
   </p>
+  <p class="status">
+    Status: {% if project['status'] == 2 %}
+    <span class="status-done">Done!</span>
+    {% elif project['status'] == 1 %}
+    <span class="status-wip">In progress</span>
+    {% elif project['status'] == 0 %}
+    <span class="status-notstarted">Not started</span>
+    {% elif project['status'] == 3 %}
+    <span class="status-late">Late!</span>
+    {% else %}
+    <span class="status-error">Something wrong</span>
+    {% endif %}
+  </p>
   {% if user[1] == 1 %}
+  <a href='/projectedit/{{ project["id"] }}/status/2'>
+    <button>Mark as complete</button>
+  </a>
   <div class="projectedit-btns">
-    <a href='/projectedit/{{ project["id"] }}'>
+    <a href='/projectedit/{{ project["id"] }}' class="projectedit-btn">
       <button>Edit project</button>
     </a>
-    <br />
-    <a href='/projectusers/{{ project["id"] }}'>
+    <a href='/projectusers/{{ project["id"] }}' class="projectedit-btn">
       <button>Manage users</button>
     </a>
   </div>

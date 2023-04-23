@@ -92,6 +92,10 @@ body {
   flex-direction: row;
 }
 
+.projectedit-btn {
+  margin: 0.1em 5px 0 0;
+}
+
 .userlist-user {
   display: flex;
   flex-direction: row;
@@ -129,4 +133,16 @@ body {
 
 .task-done {
   background-color: rgba(114, 180, 0, 0.235);
+}
+
+.status-done {
+  color: green;
+}
+
+.status-wip {
+  color: rgb(50, 50, 50);
+}
+
+.status-late {
+  color: red;
 }

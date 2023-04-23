@@ -239,6 +239,20 @@ def refresh_projects(projects):
     current_date = datetime.datetime.now().date()
     for project in projects:
         if project['status'] < 2 and ((project['deadline']-current_date).days) < 0:
-            sql = text('''UPDATE Projects SET status = 3 WHERE id = :pid''')
-            db.session.execute(sql, {'pid': project['id']})
-            db.session.commit()
+            update = update_project_status(project['id'], 3)
+            if update == Exception:
+                return update
+            else:
+                continue
+    return True
+
+
+def update_project_status(project_id, status):
+    try:
+        sql = text(
+            '''UPDATE Projects SET status = :status WHERE id = :project_id''')
+        db.session.execute(sql, {'status': status, 'project_id': project_id})
+        db.session.commit()
+        return True
+    except Exception as e:
+        return e

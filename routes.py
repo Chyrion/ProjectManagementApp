@@ -107,6 +107,16 @@ def projectedit(id):
     return redirect('/')
 
 
+@app.route('/projectedit/<int:project_id>/status/<int:status>')
+def projectedit_changestatus(project_id, status):
+    if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
+        update = projects.update_project_status(project_id, status)
+        if update == Exception:
+            return render_template('./error.html', error=update)
+        return redirect(f'/projectview/{project_id}')
+    return redirect('/')
+
+
 @app.route('/projectedit/addtask/<int:id>', methods=['GET', 'POST'])
 def projectedit_addtask(id):
     if projects.get_user_in_project(pid=id, uid=sessionsystem.session_uid())[1] == 1:
