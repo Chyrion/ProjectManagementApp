@@ -68,7 +68,7 @@ def add_task(pid, name, description, deadline=None):
                                      'description': description, 'deadline': deadline, 'status': -1})
         else:
             sql = text(
-                '''INSERT INTO ProjectTasks (pid, name, description) VALUES (:pid, :name, :description, :status) RETURNING id''')
+                '''INSERT INTO ProjectTasks (pid, name, description, status) VALUES (:pid, :name, :description, :status) RETURNING id''')
             res = db.session.execute(sql, {'pid': pid, 'name': name,
                                      'description': description, 'status': -1})
         db.session.commit()
