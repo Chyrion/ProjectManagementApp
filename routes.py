@@ -78,7 +78,17 @@ def projectview(project_id):
     if user:
         project = projects.get_project(id=project_id)
         project_tasks = tasks.get_tasks(pid=project_id)
-        return render_template('./projectview.html', project=project, user=user, date=datetime.now().date(), tasks=project_tasks)
+
+        # I know there is a more compact way to do this, but any attempt I made broke the project page so ????
+        tasks_status = 1
+        for task in project_tasks:
+            if task['status'] == -1:
+                tasks_status = -1
+                break
+        if tasks_status == -1:
+            projects.update_project_status(project_id, 1)
+
+        return render_template('./projectview.html', project=project, user=user, date=datetime.now().date(), tasks=project_tasks, tasks_status=tasks_status)
     else:
         return redirect('/')
 
@@ -107,7 +117,7 @@ def projectedit(id):
     return redirect('/')
 
 
-@app.route('/projectedit/<int:project_id>/status/<int:status>')
+@app.route('/projectedit/<int:project_id>/status/<int:status>', methods=['POST'])
 def projectedit_changestatus(project_id, status):
     if projects.get_user_in_project(pid=project_id, uid=sessionsystem.session_uid())[1] == 1:
         update = projects.update_project_status(project_id, status)
@@ -161,7 +171,7 @@ def projectedit_taskadduser(project_id, task_id):
     return redirect('/')
 
 
-@app.route('/projectedit/<int:project_id>/taskchangestatus/<int:task_id>')
+@app.route('/projectedit/<int:project_id>/taskchangestatus/<int:task_id>', methods=['POST'])
 def projectedit_taskchangestatus(project_id, task_id):
     uid = sessionsystem.session_uid()
     if projects.get_user_in_project(pid=project_id, uid=uid)[1] == 1:
@@ -170,6 +180,7 @@ def projectedit_taskchangestatus(project_id, task_id):
             return render_template('./error.html', error=change)
         if change == False:
             return render_template('./error.html', error='Error with user permissions')
+        projects.refresh_project_status(project_id)
         return redirect(f'/projectview/{project_id}')
     return redirect('/')
 

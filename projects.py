@@ -1,5 +1,6 @@
 from db import db
 import sessionsystem
+import tasks
 from sqlalchemy.sql import text
 import datetime
 
@@ -247,11 +248,32 @@ def refresh_projects(projects):
     return True
 
 
+def refresh_project_status(project_id):
+    project_tasks = tasks.get_tasks(project_id)
+    for task in project_tasks:
+        if task['status'] == -1:
+            try:
+                sql = text(
+                    '''UPDATE Projects SET status = 1 WHERE id = :project_id''')
+                db.session.execute(sql, {'project_id': project_id})
+                db.session.commit()
+                break
+            except Exception as e:
+                return e
+    return True
+
+
 def update_project_status(project_id, status):
+    if status == 2:
+        project_tasks = tasks.get_tasks(project_id)
+        for task in project_tasks:
+            if task['status'] != 1:
+                return False
     try:
         sql = text(
             '''UPDATE Projects SET status = :status WHERE id = :project_id''')
-        db.session.execute(sql, {'status': status, 'project_id': project_id})
+        db.session.execute(
+            sql, {'status': status, 'project_id': project_id})
         db.session.commit()
         return True
     except Exception as e:
