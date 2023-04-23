@@ -53,6 +53,7 @@ def logout():
 def project_page():
     if sessionsystem.session_uid():
         if request.method == 'POST':
+            sessionsystem.check_csrf()
             # new_project(name, description, users, deadline)
             project_name = request.form['project_name']
             project_description = request.form['project_description']
@@ -104,6 +105,7 @@ def projectedit(project_id):
         if request.method == 'GET':
             return render_template('./projectedit.html', id=project_id)
         else:
+            sessionsystem.check_csrf()
             if request.form['project_name']:
                 new_name = request.form['project_name']
                 projects.update_project_name(project_id, new_name)
@@ -120,6 +122,7 @@ def projectedit(project_id):
 
 @app.route('/projectedit/<int:project_id>/status/<int:status>', methods=['POST'])
 def projectedit_changestatus(project_id, status):
+    sessionsystem.check_csrf()
     if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
         update = projects.update_project_status(project_id, status)
         if update == Exception:
@@ -132,6 +135,7 @@ def projectedit_changestatus(project_id, status):
 def projectedit_deleteproject(project_id):
     if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
         if request.method == 'POST':
+            sessionsystem.check_csrf()
             deleted = projects.delete_project(project_id)
             if deleted == Exception:
                 return render_template('./error.html', error=deleted)
@@ -154,12 +158,11 @@ def projectusers(project_id):
     return redirect('/')
 
 
-@app.route('/projectusers/adduser/<int:project_id>', methods=['GET', 'POST'])
+@app.route('/projectusers/adduser/<int:project_id>', methods=['POST'])
 def projectusers_add(project_id):
     if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
-        if request.method == 'GET':
-            return redirect('/')
-        else:
+        if request.method == 'POST':
+            sessionsystem.check_csrf()
             user_to_add = request.form['username']
             add = projects.add_user_to_project(user_to_add, project_id)
             if type(add) != bool:
@@ -168,16 +171,15 @@ def projectusers_add(project_id):
     return redirect('/')
 
 
-@app.route('/projectusers/removeuser/<int:project_id>&<int:user_id>', methods=['GET', 'POST'])
+@app.route('/projectusers/removeuser/<int:project_id>&<int:user_id>', methods=['POST'])
 def projectusers_removeuser(project_id, user_id):
     user_in_project = projects.get_user_in_project(
         project_id=project_id, user_id=sessionsystem.session_uid())
     if not user_in_project:
         return redirect('/')
     elif user_in_project[1] == 1:
-        if request.method == 'GET':
-            return redirect('/')
-        else:
+        if request.method == 'POST':
+            sessionsystem.check_csrf()
             add = projects.remove_user_from_project(
                 project_id=project_id, user_id=user_id)
             if type(add) != bool:
@@ -186,17 +188,19 @@ def projectusers_removeuser(project_id, user_id):
     return redirect('/')
 
 
-@app.route('/projectusers/elevateuser/<int:project_id>&<int:user_id>', methods=['GET', 'POST'])
+@app.route('/projectusers/elevateuser/<int:project_id>&<int:user_id>', methods=['POST'])
 def projectusers_elevate(project_id, user_id):
     if request.method == 'POST':
+        sessionsystem.check_csrf()
         projects.elevate_user(project_id, user_id)
         return redirect(f'/projectusers/{project_id}')
     return redirect('/')
 
 
-@app.route('/projectusers/demoteuser/<int:project_id>&<int:user_id>', methods=['GET', 'POST'])
+@app.route('/projectusers/demoteuser/<int:project_id>&<int:user_id>', methods=['POST'])
 def projectusers_demote(project_id, user_id):
     if request.method == 'POST':
+        sessionsystem.check_csrf()
         projects.demote_user(project_id, user_id)
         return redirect(f'/projectusers/{project_id}')
     return redirect('/')
@@ -208,6 +212,7 @@ def projectedit_addtask(project_id):
         if request.method == 'GET':
             return render_template('./addtask.html', id=project_id)
         elif request.method == 'POST':
+            sessionsystem.check_csrf()
             task_name = request.form['task_name']
             task_description = request.form['task_description']
             task_deadline = request.form['task_deadline']
@@ -226,6 +231,7 @@ def projectedit_taskedit(project_id, task_id):
         if request.method == 'GET':
             return render_template('./edittask.html', project_id=project_id, task_id=task_id)
         else:
+            sessionsystem.check_csrf()
             if request.form['task_name']:
                 new_name = request.form['task_name']
                 tasks.update_task_name(task_id, new_name)
@@ -243,6 +249,7 @@ def projectedit_taskedit(project_id, task_id):
 @app.route('/projectedit/<int:project_id>/taskadduser/<int:task_id>', methods=['POST'])
 def projectedit_taskadduser(project_id, task_id):
     if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
+        sessionsystem.check_csrf()
         username = request.form['username']
         user_to_add_in = projects.get_user_in_project(
             project_id=project_id, username=username)
@@ -264,6 +271,7 @@ def projectedit_taskadduser(project_id, task_id):
 
 @app.route('/projectedit/<int:project_id>/taskchangestatus/<int:task_id>', methods=['POST'])
 def projectedit_taskchangestatus(project_id, task_id):
+    sessionsystem.check_csrf()
     user_id = sessionsystem.session_uid()
     if projects.get_user_in_project(project_id=project_id, user_id=user_id)[1] == 1:
         change = tasks.change_task_status(project_id, task_id, user_id)
@@ -279,6 +287,7 @@ def projectedit_taskchangestatus(project_id, task_id):
 @app.route('/projectedit/<int:project_id>/deletetask/<int:task_id>', methods=['POST'])
 def projectedit_deletetask(project_id, task_id):
     if request.method == 'POST':
+        sessionsystem.check_csrf()
         if projects.get_user_in_project(project_id=project_id, user_id=sessionsystem.session_uid())[1] == 1:
             delete = tasks.delete_task(project_id, task_id)
             if delete == Exception:

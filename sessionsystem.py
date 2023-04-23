@@ -1,5 +1,6 @@
 from db import db
-from flask import session
+from flask import session, request, abort
+from secrets import token_hex
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 
@@ -36,6 +37,7 @@ def login(username, password):
     if not user or not check_password_hash(user[2], password):
         return False
     session['uid'], session['username'] = user[0], user[1]
+    session['csrf_token'] = token_hex(16)
     return True
 
 
@@ -43,6 +45,11 @@ def logout():
     del session['uid']
     del session['username']
     return True
+
+
+def check_csrf():
+    if session['csrf_token'] != request.form['csrf_token']:
+        abort(403)
 
 
 def session_uid() -> int:

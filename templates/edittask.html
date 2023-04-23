@@ -20,6 +20,7 @@ content %}
     action="/projectedit/{{ project_id }}/deletetask/{{ task_id }}"
     method="POST"
   >
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Delete task" class="btn-delete" />
   </form>
 </div>

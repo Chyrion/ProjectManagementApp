@@ -16,9 +16,11 @@ content %}
       max="2035-12-31"
     />
     <br />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Confirm" />
   </form>
   <form action="/projectedit/delete/{{ id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Delete project" class="btn-delete" />
   </form>
 </div>

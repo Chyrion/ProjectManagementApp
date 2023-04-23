@@ -21,6 +21,7 @@ block content %}
       action="/projectusers/elevateuser/{{ id }}&{{ user[1] }}"
       method="POST"
     >
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="submit" value="Elevate user" />
     </form>
 
@@ -30,6 +31,7 @@ block content %}
       action="/projectusers/demoteuser/{{ id }}&{{ user[1] }}"
       method="POST"
     >
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="submit" value="Demote user" />
     </form>
     {% endif %}
@@ -37,6 +39,7 @@ block content %}
       action="/projectusers/removeuser/{{ id }}&{{ user[1] }}"
       method="POST"
     >
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="submit" value="Remove user" />
     </form>
     {% endif %}
@@ -48,6 +51,7 @@ block content %}
     <h4>Add user</h4>
     <input type="text" name="username" />
     <br />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Add" />
   </form>
   <a href="/projectview/{{ id }}">
