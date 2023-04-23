@@ -21,10 +21,15 @@ endblock %} {% block content %}
     <span class="status-error">Something wrong</span>
     {% endif %}
   </p>
-  {% if user[1] == 1 %}
-  <a href='/projectedit/{{ project["id"] }}/status/2'>
-    <button>Mark as complete</button>
-  </a>
+  {% if user[1] == 1 %} {% if tasks_status == 1 and project['status'] != 2 %}
+  <form action='/projectedit/{{ project["id"] }}/status/2' method="POST">
+    <input type="submit" value="Mark as done" />
+  </form>
+  {% elif project['status'] == 2 %}
+  <form action='/projectedit/{{ project["id"] }}/status/1' method="POST">
+    <input type="submit" value="Mark as incomplete" />
+  </form>
+  {% endif %}
   <div class="projectedit-btns">
     <a href='/projectedit/{{ project["id"] }}' class="projectedit-btn">
       <button>Edit project</button>
@@ -59,17 +64,19 @@ endblock %} {% block content %}
       </form>
       {% endif %} {% if user[3] in task['users'][0] %} {% if task['status'] ==
       -1 %}
-      <a
-        href='/projectedit/{{ project["id"] }}/taskchangestatus/{{ task["id"] }}'
+      <form
+        action='/projectedit/{{ project["id"] }}/taskchangestatus/{{ task["id"] }}'
+        method="POST"
       >
-        <button>Mark as done</button>
-      </a>
+        <input type="submit" value="Mark as done" />
+      </form>
       {% elif task['status'] == 1 %}
-      <a
-        href='/projectedit/{{ project["id"] }}/taskchangestatus/{{ task["id"] }}'
+      <form
+        action='/projectedit/{{ project["id"] }}/taskchangestatus/{{ task["id"] }}'
+        method="POST"
       >
-        <button>Mark as incomplete</button>
-      </a>
+        <input type="submit" value="Mark as incomplete" />
+      </form>
       {% endif %} {% endif %}
 
       <h5>Users</h5>
