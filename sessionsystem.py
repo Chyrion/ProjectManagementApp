@@ -34,8 +34,10 @@ def login(username, password):
         user = res.fetchone()
     except:
         pass
-    if not user or not check_password_hash(user[2], password):
-        return False
+    if not user:
+        return 'User not found'
+    if not check_password_hash(user[2], password):
+        return 'Incorrect password'
     session['uid'], session['username'] = user[0], user[1]
     session['csrf_token'] = token_hex(16)
     return True
