@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<head>
-  <title>Project Management App</title>
-  <link href="../static/main.css" rel="stylesheet" />
-</head>
-<body>
-  <div class="content-nonstandard">
-    <h1>Project Management App</h1>
-    <a href="/login">
-      <button style="padding: 2em 1em">Login</button>
-    </a>
-    <br />
-    <a href="/register">
-      <button style="padding: 2em 1em">Register</button>
-    </a>
+{% extends 'layout.html' %} {% block title %}Project Management App{% endblock
+%} {% block content %}
+<div class="content-nonstandard">
+  <h1>Project Management App</h1>
+  <div class="entry-info">
+    <p>
+      This is a project management application, in which users can create
+      personal or collaborative projects. Projects are made up of tasks, which
+      can be assigned to users who are part of the project.
+    </p>
+    <p>
+      Projects keep track of their status. Fresh projects will be marked as 'not
+      started', but when tasks are added (but not completed), the project moves
+      to 'in progress'. Once all tasks are marked as complete, the project may
+      also be marked complete!
+    </p>
+    <p>
+      Projects and tasks also have deadlines! Each one will show how long it is
+      until the given deadline. Once the deadline has passed, the project or
+      task will be marked as 'Late!'. However, this does not prevent completion,
+      and projects/tasks may be marked as completed even after the deadline has
+      passed.
+    </p>
   </div>
-</body>
+</div>
+{% endblock %}

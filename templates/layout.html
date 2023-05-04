@@ -9,9 +9,15 @@
       <a href="/">
         <button>Home</button>
       </a>
+      {% if session.csrf_token %}
       <a href="/logout">
         <button>Log out</button>
       </a>
+      {% else %}
+      <a href="/login">
+        <button>Log in</button>
+      </a>
+      {% endif %}
     </div>
     <div class="left"></div>
     <div class="content">{% block content %} {% endblock %}</div>
