@@ -170,7 +170,8 @@ def update_project_description(project_id, description):
     try:
         sql = text(
             '''UPDATE Projects SET description = :description WHERE id = :project_id''')
-        db.session.execute(sql, {'description': description, 'id': project_id})
+        db.session.execute(
+            sql, {'description': description, 'project_id': project_id})
         db.session.commit()
         return True
     except Exception as sql_exception:
