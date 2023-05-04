@@ -14,7 +14,7 @@ def register(username, password):
     except:
         pass
     if existing_user:
-        return False
+        return 'User already exists!'
 
     pass_hash = generate_password_hash(password)
     try:
@@ -23,7 +23,7 @@ def register(username, password):
             text(sql), {'username': username, 'password': pass_hash})
         db.session.commit()
     except:
-        return False
+        return 'Error creating account'
     return True
 
 
@@ -44,6 +44,7 @@ def login(username, password):
 def logout():
     del session['uid']
     del session['username']
+    del session['csrf_token']
     return True
 
 
