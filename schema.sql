@@ -31,5 +31,6 @@ CREATE TABLE ProjectTasks (
 CREATE TABLE TasksUsers (
     tid INTEGER REFERENCES ProjectTasks(id),
     uid INTEGER REFERENCES Users(id),
-    permission INTEGER
+    permission INTEGER,
+    creator BOOLEAN DEFAULT FALSE
 );
